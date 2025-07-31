@@ -174,7 +174,7 @@ export default function Home() {
             accessor={"population"}
             backgroundColor={"transparent"}
             paddingLeft={"15"}
-            center={[8, 10]}
+            center={[14, -20]}
             absolute={false}
             style={styles.pieChart}
           />
