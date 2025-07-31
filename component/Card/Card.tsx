@@ -42,9 +42,10 @@ const styles = StyleSheet.create({
     cardContainer: {
         padding: 16,
         margin: 16,
-        backgroundColor: 'darkgreen',
+        backgroundColor: '#004225',
         borderRadius: 20,
         gap: 100,
+        elevation: 15,
     },
 
     totalContainer: {
