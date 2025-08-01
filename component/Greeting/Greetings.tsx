@@ -19,10 +19,12 @@ export const Greetings: React.FC<GreetProp> = ({
         }
     }
 
+    const greetingOnTime = `${timeOfDay()},`
+
     return (
         <View style={styles.container}>
 
-            <Text style={styles.greet}>{timeOfDay()}</Text>
+            <Text style={styles.greet}>{greetingOnTime}</Text>
 
             <Text style={styles.person}>{name}</Text>
 
@@ -32,18 +34,20 @@ export const Greetings: React.FC<GreetProp> = ({
 
 const styles = StyleSheet.create({
 
-    container:{
+    container: {
         justifyContent: "center",
         // alignItems: "center"
     },
 
     greet: {
-        fontSize: 14,
-        color: "#F5F5F5",
+        fontSize: 24,
+fontWeight:400,
+        color: "darkgreen",
     },
 
     person: {
         fontSize: 38,
-        color: "white",
+        fontWeight: 600,
+        // color: "white",
     },
 })

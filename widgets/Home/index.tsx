@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, ScrollView, Dimensions } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, Dimensions, ImageBackground } from 'react-native';
 import { Card, Button, Row, StatCard, Greetings } from '@/component';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { PieChart } from 'react-native-chart-kit';
@@ -53,135 +53,155 @@ export default function Home() {
 
     <ScrollView contentContainerStyle={styles.scrollContainer}>
 
-      <View style={styles.greet}>
-
-        <Greetings
-        // name=`${firstName}`
-        />
-
-      </View>
-
-      <View style={styles.cardWrapper}>
-
-        <Card
-          amount={9876}
-          cardNumber={20986753456786424589}
-          date={cardDate(new Date().toString())}
-        />
-
-      </View>
-
-      <View style={styles.container}>
-
-        <Row title="Services">
-
-          <View>
-
-            <Button
-              onPress={() => console.log("Transfer")}
-              icon={
-                <FontAwesome5
-                  name="exchange-alt"
-                  size={32}
-                />
-              }
-            />
-            <Text style={styles.text}>Transfer</Text>
-
-          </View>
-
-          <View>
-
-            <Button
-              onPress={() => console.log("Deposit")}
-              icon={
-                <FontAwesome5
-                  name="plus"
-                  size={32}
-                />
-              }
-            />
-            <Text style={styles.text}>Deposit</Text>
-
-          </View>
-
-          <View>
-
-            <Button
-              onPress={() => console.log("Withdrawal")}
-              icon={
-                <FontAwesome5
-                  name="arrow-circle-down"
-                  size={32}
-                />
-              }
-            />
-            <Text style={styles.text}>Withdrawal</Text>
-
-          </View>
-
-        </Row>
-
-        <Row title="Statistics">
-
-
-          <View>
-
-            <StatCard
-              icon={
-                <FontAwesome5
-                  name="arrow-up"
-                  size={32}
-                />
-              }
-              title='INCOME'
-              value={income}
-              cardColour='#004225'
-              iconColour='#50C878'
-            />
-
-          </View>
-
-          <View>
-
-            <StatCard
-              icon={
-                <FontAwesome5
-                  name="arrow-down"
-                  size={32}
-                />
-              }
-              title='EXPENSES'
-              value={expenses}
-              cardColour='#FF0000'
-              iconColour='#E44D2E'
-            />
-
-          </View>
-
-        </Row>
-
-        <Row
-          title="Chart"
-          style={styles.pie}
+      <ImageBackground
+        source={require("../../assets/Image/bank.png")}
+      
+      >
+        <View
+          style={{
+            backgroundColor: "white",
+            position: "absolute",
+            top: 0,
+            bottom: 0,
+            right: 0,
+            left: 0,
+            opacity: 0.2,
+            // zIndex: 1
+          }}
         >
+          {/* <Text>ggggggggggggggggg </Text> */}
+          </View>
+        <View style={styles.greet}>
 
-          <PieChart
-            data={data}
-            width={screenWidth}
-            height={220}
-            chartConfig={chartConfig}
-            accessor={"population"}
-            backgroundColor={"transparent"}
-            paddingLeft={"15"}
-            center={[14, -20]}
-            absolute={false}
-            style={styles.pieChart}
+          <Greetings
+            name={`${firstName}`}
           />
 
-        </Row>
+        </View>
 
-      </View>
+        <View style={styles.cardWrapper}>
+
+          <Card
+            amount={9876}
+            cardNumber={20986753456786424589}
+            date={cardDate(new Date().toString())}
+          />
+
+        </View>
+
+        <View style={styles.container}>
+
+          <Row title="Services">
+
+            <View>
+
+              <Button
+                onPress={() => console.log("Transfer")}
+                icon={
+                  <FontAwesome5
+                    name="exchange-alt"
+                    size={32}
+                  />
+                }
+              />
+              <Text style={styles.text}>Transfer</Text>
+
+            </View>
+
+            <View>
+
+              <Button
+                onPress={() => console.log("Deposit")}
+                icon={
+                  <FontAwesome5
+                    name="plus"
+                    size={32}
+                  />
+                }
+              />
+              <Text style={styles.text}>Deposit</Text>
+
+            </View>
+
+            <View>
+
+              <Button
+                onPress={() => console.log("Withdrawal")}
+                icon={
+                  <FontAwesome5
+                    name="arrow-circle-down"
+                    size={32}
+                  />
+                }
+              />
+              <Text style={styles.text}>Withdrawal</Text>
+
+            </View>
+
+          </Row>
+
+          <Row title="Statistics">
+
+
+            <View>
+
+              <StatCard
+                icon={
+                  <FontAwesome5
+                    name="arrow-up"
+                    size={32}
+                  />
+                }
+                title='INCOME'
+                value={income}
+                cardColour='#004225'
+                iconColour='#50C878'
+              />
+
+            </View>
+
+            <View>
+
+              <StatCard
+                icon={
+                  <FontAwesome5
+                    name="arrow-down"
+                    size={32}
+                  />
+                }
+                title='EXPENSES'
+                value={expenses}
+                cardColour='#FF0000'
+                iconColour='#E44D2E'
+              />
+
+            </View>
+
+          </Row>
+
+          <Row
+            title="Chart"
+            style={styles.pie}
+          >
+
+            <PieChart
+              data={data}
+              width={screenWidth}
+              height={220}
+              chartConfig={chartConfig}
+              accessor={"population"}
+              backgroundColor={"transparent"}
+              paddingLeft={"15"}
+              center={[14, -20]}
+              absolute={false}
+              style={styles.pieChart}
+            />
+
+          </Row>
+
+        </View>
+
+      </ImageBackground>
 
     </ScrollView>
   );
