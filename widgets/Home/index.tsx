@@ -47,7 +47,9 @@ export default function Home() {
     useShadowColorFromDataset: false // optional
   };
 
-  const firstName = "John Doe"
+  const firstName = "John"
+
+  const lastName = "Doe"
 
   return (
 
@@ -65,7 +67,7 @@ export default function Home() {
             bottom: 0,
             right: 0,
             left: 0,
-            opacity: 0.2,
+            opacity: 0.3,
             // zIndex: 1
           }}
         >
@@ -74,7 +76,7 @@ export default function Home() {
         <View style={styles.greet}>
 
           <Greetings
-            name={`${firstName}`}
+            name={`${firstName} ${lastName}`}
           />
 
         </View>
