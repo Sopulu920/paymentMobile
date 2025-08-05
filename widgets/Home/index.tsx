@@ -203,9 +203,9 @@ export default function Home() {
 
             </Row>
 
-            <Input
+            {/* <Input
             // name='jhgg'
-            />
+            /> */}
 
           </View>
 
