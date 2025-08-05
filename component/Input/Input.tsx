@@ -9,6 +9,7 @@ export const Input: React.FC<InputProps> = ({
 }) => {
     return (
         <KeyboardAvoidingView
+            behavior="padding"
             keyboardVerticalOffset={100}
             style={styles.container}
         >

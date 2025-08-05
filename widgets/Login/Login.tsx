@@ -1,12 +1,12 @@
-import { View, StyleSheet, Text, Button, Dimensions, Pressable } from "react-native";
+import { View, StyleSheet, Text, Button, Dimensions, Pressable, KeyboardAvoidingView } from "react-native";
 import { Input } from "@/component";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 type RootStackParamList = {
-    MainTabs: undefined; 
-    SignUp: undefined   
+    MainTabs: undefined;
+    SignUp: undefined
 };
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'MainTabs', 'SignUp'>;
@@ -19,52 +19,60 @@ export default function Login() {
 
         <SafeAreaView style={styles.Container}>
 
-            <View style={styles.formContainer}>
+            <KeyboardAvoidingView
+                behavior="padding"
+                // keyboardVerticalOffset={50}
+                style={{ width: "100%" }}
+            >
 
-                <Text style={styles.formTitle}>WELCOME</Text>
+                <View style={styles.formContainer}>
 
-                <View style={styles.formField}>
+                    <Text style={styles.formTitle}>WELCOME</Text>
 
-                    <Input
-                        name="Email Address"
-                    />
+                    <View style={styles.formField}>
 
-                    <Input
-                        name="Password"
-                    />
+                        <Input
+                            name="Email Address"
+                        />
+
+                        <Input
+                            name="Password"
+                        />
+
+                    </View>
+
+                    <View style={{ marginBottom: 13 }}>
+
+                        <Button
+                            title="Login"
+                            onPress={() => {
+                                console.log("login")
+                                navigation.navigate("MainTabs")
+                            }}
+                            color={"green"}
+                        // style={{}}
+                        />
+
+                    </View>
 
                 </View>
 
-                <View style={{ marginBottom: 13 }}>
+                <View style={styles.signUp}>
 
-                    <Button
-                        title="Login"
-                        onPress={() => {
-                            console.log("login")
-                            navigation.navigate("MainTabs")
-                        }}
-                        color={"green"}
-                    // style={{}}
-                    />
+                    <Text>
+                        I don't have an Account ?
+                    </Text>
+
+                    <Pressable
+
+                        onPress={() => navigation.navigate("SignUp")}
+                    >
+                        <Text style={styles.signUpText}>Sign Up</Text>
+                    </Pressable>
 
                 </View>
 
-            </View>
-
-            <View style={styles.signUp}>
-
-                <Text>
-                    I don't have an Account ?
-                </Text>
-
-                <Pressable
-                            
-                onPress={()=>navigation.navigate("SignUp")}
-                >
-                    <Text style={styles.signUpText}>Sign Up</Text>
-                </Pressable>
-
-            </View>
+            </KeyboardAvoidingView>
 
         </SafeAreaView>
     )
@@ -87,6 +95,13 @@ const styles = StyleSheet.create({
         width: "100%",
         backgroundColor: "white",
         gap: 40,
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 8, // higher = more shadow below
+        },
+        shadowOpacity: 0.2,
+        shadowRadius: 10.32,
         // height: screenHeight * 0.5,
     },
 
@@ -106,6 +121,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         gap: 20,
         margin: 16,
+        justifyContent: "center",
     },
 
     signUpText: {
