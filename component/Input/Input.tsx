@@ -1,26 +1,36 @@
-import { View, Text, TextInput, StyleSheet, Platform, KeyboardAvoidingView } from "react-native"
+import { View, Text, TextInput, StyleSheet, Platform } from "react-native"
 
 interface InputProps {
-    name?: string
+    name?: string;
+    secure?: boolean;
+    placeholder?: string;
+    value?: string;
+    onChangeText?: (text: string) => void;
+    capitalizeFirstLetter?: boolean;
 }
 
 export const Input: React.FC<InputProps> = ({
-    name = "title"
+    name = "Title",
+    secure = false,
+    placeholder,
+    value,
+    onChangeText,
+    capitalizeFirstLetter = false,
 }) => {
     return (
-        <KeyboardAvoidingView
-            behavior="padding"
-            keyboardVerticalOffset={100}
-            style={styles.container}
-        >
+        <View style={styles.container}>
             <Text style={styles.label}>{name}</Text>
             <TextInput
                 style={styles.input}
+                placeholder={placeholder ?? `Enter ${name}`}
+                value={value}
+                onChangeText={onChangeText}
+                secureTextEntry={secure}
                 autoCorrect={false}
-                autoCapitalize="none"
+                autoCapitalize={capitalizeFirstLetter ? "words" : "none"}
             // keybo
             />
-        </KeyboardAvoidingView>
+        </View>
     )
 }
 

@@ -3,6 +3,7 @@ import { Input } from "@/component";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useState } from "react";
 
 type RootStackParamList = {
     MainTabs: undefined;
@@ -15,6 +16,10 @@ export default function Login() {
 
     const navigation = useNavigation<NavigationProp>()
 
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+
+    console.log(email, password)
     return (
 
         <SafeAreaView style={styles.Container}>
@@ -33,10 +38,16 @@ export default function Login() {
 
                         <Input
                             name="Email Address"
+                            placeholder="example@gmail.com"
+                            value={email}
+                            onChangeText={setEmail}
                         />
 
                         <Input
                             name="Password"
+                            secure={true}
+                            value={password}
+                            onChangeText={setPassword}
                         />
 
                     </View>

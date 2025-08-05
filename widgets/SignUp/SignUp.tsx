@@ -2,6 +2,7 @@ import { View, StyleSheet, Text, Button, Dimensions, Pressable, KeyboardAvoiding
 import { Input } from "@/component";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
+import { useState } from "react";
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 type RootStackParamList = {
@@ -13,6 +14,14 @@ type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'Login'>;
 export default function SignUp() {
 
     const navigation = useNavigation<NavigationProp>()
+
+    const [email, setEmail] = useState("")
+    const [firstName, setFirstName] = useState("")
+    const [lastName, setLastName] = useState("")
+    const [password, setPassword] = useState("")
+    const [confirmPassword, setConfirmPassword] = useState("")
+
+    console.log(email, firstName, lastName, password, confirmPassword)
 
     return (
 
@@ -32,22 +41,37 @@ export default function SignUp() {
 
                         <Input
                             name="Email Address"
+                            placeholder="example@gmail.com"
+                            value={email}
+                            onChangeText={setEmail}
                         />
 
                         <Input
                             name="First Name"
+                            capitalizeFirstLetter={true}
+                            value={firstName}
+                            onChangeText={setFirstName}
                         />
 
                         <Input
                             name="Last Name"
+                            capitalizeFirstLetter={true}
+                            value={lastName}
+                            onChangeText={setLastName}
                         />
 
                         <Input
                             name="Password"
+                            secure={true}
+                            value={password}
+                            onChangeText={setPassword}
                         />
 
                         <Input
                             name="Confirm Password"
+                            secure={true}
+                            value={confirmPassword}
+                            onChangeText={setConfirmPassword}
                         />
 
                     </View>
@@ -120,7 +144,6 @@ const styles = StyleSheet.create({
 
     formField: {
         gap: 10,
-
     },
 
     formTitle: {
