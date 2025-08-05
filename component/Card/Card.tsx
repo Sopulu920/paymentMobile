@@ -46,6 +46,13 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         gap: 100,
         elevation: 15,
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 8, // higher = more shadow below
+        },
+        shadowOpacity: 0.2,
+        shadowRadius: 10.32,
     },
 
     totalContainer: {

@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Pressable } from "react-native"
+import { View, Text, StyleSheet, Pressable, SafeAreaView } from "react-native"
 import { ProfileImage } from "@/component"
 import { Row } from "@/component"
 
@@ -9,46 +9,51 @@ export default function Profile() {
     const AccountNumber = "938457693902082747"
 
     return (
-        <View style={styles.container}>
 
-            <ProfileImage
-                firstName={`${firstName}`}
-                lastName={`${lastName}`}
-                size={125}
-                fontSize={80}
-                style={styles.profileImg}
-            />
+        <SafeAreaView>
 
-            <Row style={styles.profileCard}>
+            <View style={styles.container}>
 
-                <View style={styles.profileContainer}>
+                <ProfileImage
+                    firstName={`${firstName}`}
+                    lastName={`${lastName}`}
+                    size={125}
+                    fontSize={80}
+                    style={styles.profileImg}
+                />
+
+                <Row style={styles.profileCard}>
+
+                    <View style={styles.profileContainer}>
 
 
-                    <View style={styles.textContainer}>
+                        <View style={styles.textContainer}>
 
-                        <Text style={styles.fontQuestion}>First Name: </Text>
-                        <Text style={styles.fontQuestion}>Last Name: </Text>
-                        <Text style={styles.fontQuestion}>Account Number: </Text>
+                            <Text style={styles.fontQuestion}>First Name: </Text>
+                            <Text style={styles.fontQuestion}>Last Name: </Text>
+                            <Text style={styles.fontQuestion}>Account Number: </Text>
+
+                        </View>
+
+                        <View style={styles.textContainer}>
+
+                            <Text style={styles.fontAnswer}>{firstName}</Text>
+                            <Text style={styles.fontAnswer}>{lastName}</Text>
+                            <Text style={styles.fontAnswer}>{AccountNumber}</Text>
+
+                        </View>
 
                     </View>
 
-                    <View style={styles.textContainer}>
+                </Row>
 
-                        <Text style={styles.fontAnswer}>{firstName}</Text>
-                        <Text style={styles.fontAnswer}>{lastName}</Text>
-                        <Text style={styles.fontAnswer}>{AccountNumber}</Text>
+                <Pressable>
+                    <Text style={styles.logout}>Log Out</Text>
+                </Pressable>
 
-                    </View>
+            </View>
 
-                </View>
-
-            </Row>
-
-            <Pressable>
-                <Text style={styles.logout}>Log Out</Text>
-            </Pressable>
-
-        </View>
+        </SafeAreaView>
     )
 }
 
@@ -65,6 +70,7 @@ const styles = StyleSheet.create({
     profileContainer: {
         flexDirection: "row",
         gap: 50,
+        marginBottom: 40,
     },
 
     textContainer: {
@@ -74,19 +80,20 @@ const styles = StyleSheet.create({
     fontQuestion: {
         fontSize: 15,
         fontWeight: 600,
-        textAlign:"left",
+        textAlign: "left",
     },
 
     fontAnswer: {
         fontSize: 15,
         fontWeight: 400,
-        textAlign:"right",
+        textAlign: "right",
     },
 
     logout: {
-        fontSize: 15,
+        fontSize: 25,
         fontWeight: 600,
         color: "red",
+        margin: 9,
     },
 
     profileImg: {

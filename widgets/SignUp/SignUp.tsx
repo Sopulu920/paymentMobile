@@ -1,0 +1,129 @@
+import { View, StyleSheet, Text, Button, Dimensions, Pressable } from "react-native";
+import { Input } from "@/component";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
+type RootStackParamList = {
+    Login: undefined;
+};
+
+type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'Login'>;
+
+export default function Login() {
+
+    const navigation = useNavigation<NavigationProp>()
+
+    return (
+
+        <SafeAreaView style={styles.Container}>
+
+            <View style={styles.formContainer}>
+
+                <Text style={styles.formTitle}>SIGN UP</Text>
+
+                <View style={styles.formField}>
+
+                    <Input
+                        name="Email Address"
+                    />
+
+                    <Input
+                        name="First Name"
+                    />
+
+                    <Input
+                        name="Last Name"
+                    />
+
+                    <Input
+                        name="Password"
+                    />
+
+                    <Input
+                        name="Confirm Password"
+                    />
+
+                </View>
+
+                <View style={{ marginBottom: 13 }}>
+
+                    <Button
+                        title="Sign Up"
+                        onPress={() => {
+                            console.log("login")
+                            navigation.navigate("Login")
+                        }}
+                        color={"green"}
+                    // style={{}}
+                    />
+
+                </View>
+
+            </View>
+
+            <View style={styles.signUp}>
+
+                <Text>
+                    I Already have an Account ?
+                </Text>
+
+                <Pressable
+                    onPress={() => {
+                        console.log("login")
+                        navigation.navigate("Login")
+                    }}
+                >
+                    <Text style={styles.signUpText}>Log in</Text>
+                </Pressable>
+
+            </View>
+
+        </SafeAreaView>
+    )
+}
+
+const { height: screenHeight } = Dimensions.get("window")
+
+const styles = StyleSheet.create({
+    Container: {
+        height: screenHeight,
+        padding: 16,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+
+    formContainer: {
+        borderRadius: 15,
+        padding: 6,
+        elevation: 15,
+        width: "100%",
+        backgroundColor: "white",
+        gap: 40,
+        // height: screenHeight * 0.5,
+    },
+
+    formField: {
+        gap: 10,
+
+    },
+
+    formTitle: {
+        fontSize: 30,
+        fontWeight: 600,
+        color: "green",
+        textAlign: "center"
+    },
+
+    signUp: {
+        flexDirection: "row",
+        gap: 20,
+        margin: 16,
+    },
+
+    signUpText: {
+        // fontSize: 26,
+        color: "green"
+    },
+
+})

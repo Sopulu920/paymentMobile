@@ -1,52 +1,43 @@
-import { View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Home from "./widgets/Home/index";
 import Profile from './widgets/Profile';
+import Login from './widgets/Login/Login';
+import SignUp from "./widgets/SignUp/SignUp"
 
 const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
+
+// Tab Navigator for Home & Profile
+function TabNavigator() {
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ size, color }) => {
+          let icon = route.name === "Home" ? "home" : "user";
+          return <FontAwesome5 name={icon} size={size} color={color} solid />;
+        },
+        tabBarActiveTintColor: "green",
+        tabBarInactiveTintColor: "gray",
+        headerShown: false
+      })}
+    >
+      <Tab.Screen name="Home" component={Home} />
+      <Tab.Screen name="Profile" component={Profile} />
+    </Tab.Navigator>
+  );
+}
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Tab.Navigator
-        initialRouteName="Home"
-        // screenOptions={({ route }) => ({
-        //   tabBarIcon: ({ color, size }) => {
-        //     let iconName: string;
-
-        //     if (route.name === 'Home') {
-        //       iconName = 'home';
-        //     } else if (route.name === 'Profile') {
-        //       iconName = 'user';
-        //     }
-
-        //     return <FontAwesome5 name={iconName!} size={size} color={color} solid />;
-        //   },
-        //   tabBarActiveTintColor: 'green',
-        //   tabBarInactiveTintColor: 'gray',
-        // })}
-        // screenLayout={}
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ size, color }) => {
-            let icon
-
-            if (route.name === "Home") {
-              icon = "home"
-            } else if (route.name === "Profile") {
-              icon = "user"
-            }
-
-            return <FontAwesome5 name={icon} size={size} color={color} solid />
-          },
-          tabBarActiveTintColor: "green",
-          tabBarInactiveTintColor: "gray",
-        })}
-      >
-        <Tab.Screen name="Home" component={Home} options={{ title: 'Welcome' }} />
-        <Tab.Screen name="Profile" component={Profile} />
-      </Tab.Navigator>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="SignUp" component={SignUp} />
+        <Stack.Screen name="MainTabs" component={TabNavigator} />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }

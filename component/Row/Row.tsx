@@ -33,14 +33,14 @@ export const Row: React.FC<RowProps> = ({
 
             </View>
 
-            <ScrollView
-                horizontal
-                contentContainerStyle={styles.innerRow}
+            <View
+                // horizontal={true}
+                style={styles.innerRow}
             >
 
                 {children}
 
-            </ScrollView>
+            </View>
 
         </View>
     );
@@ -53,6 +53,13 @@ const styles = StyleSheet.create({
         // position: "absolute",
         // zIndex: 2,
         elevation: 15,
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 8, // higher = more shadow below
+        },
+        shadowOpacity: 0.2,
+        shadowRadius: 10.32,
         backgroundColor: "#fff",
         borderRadius: 15,
         // padding: 6,
@@ -66,8 +73,8 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         gap: 16,
-        height: "100%",
-        width: "100%",
+        // height: "100%",
+        // width: "100%",
         margin: 5,
     },
 

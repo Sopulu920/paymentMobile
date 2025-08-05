@@ -4,3 +4,4 @@ export { Row } from './Row/Row'
 export { StatCard } from "./statCard/statCard"
 export { Greetings } from "./Greeting/Greetings"
 export { ProfileImage } from "./ProfileImage/ProfileImage"
+export { Input } from "./Input/Input"
