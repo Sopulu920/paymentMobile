@@ -1,9 +1,21 @@
-import { StyleSheet, View, Text, ScrollView, Dimensions, ImageBackground, Platform, SafeAreaView } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, Dimensions, ImageBackground, Platform, SafeAreaView, Pressable, Modal } from 'react-native';
 import { Card, Button, Row, StatCard, Greetings, Input } from '@/component';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { PieChart } from 'react-native-chart-kit';
+import { useState } from 'react';
 
 export default function Home() {
+
+  const [visibleModal, setVisibleModal] = useState<"transfer" | "deposit" | "withdraw" | null>(null);
+  const [amount, setAmount] = useState("");
+  const [accountNumber, setAccountNumber] = useState("");
+
+  const handleSubmit = () => {
+    if (!amount) return alert("Please enter amount");
+    alert(`${visibleModal?.toUpperCase()} of ₦${amount} successful`);
+    setAmount("");
+    setVisibleModal(null);
+  };
 
   const cardDate = (date: string) => {
     const month = new Date(date).getMonth() + 1;
@@ -100,7 +112,7 @@ export default function Home() {
               <View>
 
                 <Button
-                  onPress={() => console.log("Transfer")}
+                  onPress={() => setVisibleModal("transfer")}
                   icon={
                     <FontAwesome5
                       name="exchange-alt"
@@ -115,7 +127,7 @@ export default function Home() {
               <View>
 
                 <Button
-                  onPress={() => console.log("Deposit")}
+                  onPress={() => setVisibleModal("deposit")}
                   icon={
                     <FontAwesome5
                       name="plus"
@@ -130,7 +142,7 @@ export default function Home() {
               <View>
 
                 <Button
-                  onPress={() => console.log("Withdrawal")}
+                  onPress={() => setVisibleModal("withdraw")}
                   icon={
                     <FontAwesome5
                       name="arrow-circle-down"
@@ -213,6 +225,64 @@ export default function Home() {
 
       </ScrollView>
 
+      <Modal
+        visible={visibleModal !== null}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setVisibleModal(null)}
+      >
+
+        <View style={modalStyles.overlay}>
+
+          <View style={modalStyles.modalView}>
+
+            <Text style={modalStyles.modalTitle}>
+              {visibleModal?.toUpperCase()}
+            </Text>
+
+            <View style={modalStyles.formContainer}>
+
+              {visibleModal === "transfer" && (
+                <Input
+                  name='Enter account number'
+                  placeholder="Enter account number"
+                  keyboardType="numeric"
+                  value={accountNumber}
+                  onChangeText={setAccountNumber}
+                // style={modalStyles.input}
+                />
+              )}
+
+              <Input
+                name='Enter amount'
+                placeholder="Enter amount"
+                keyboardType="numeric"
+                value={amount}
+                onChangeText={setAmount}
+              // style={modalStyles.input}
+              />
+
+              <View style={modalStyles.btn}>
+
+                <Pressable style={modalStyles.submitButton} onPress={handleSubmit}>
+                  <Text style={modalStyles.submitText}>Submit</Text>
+                </Pressable>
+
+                <Pressable onPress={() => setVisibleModal(null)}>
+                  <Text style={modalStyles.cancelText}>Cancel</Text>
+                </Pressable>
+
+              </View>
+
+            </View>
+
+          </View>
+
+        </View>
+
+      </Modal>
+
+
     </SafeAreaView>
   );
 }
@@ -265,5 +335,69 @@ const styles = StyleSheet.create({
   greet: {
     marginLeft: 15,
     marginTop: Platform.OS === "ios" ? 60 : 40,
+  },
+});
+
+const modalStyles = StyleSheet.create({
+
+  overlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  modalView: {
+    width: 300,
+    padding: 25,
+    backgroundColor: "white",
+    borderRadius: 10,
+    elevation: 10,
+    alignItems: "center",
+  },
+
+  modalTitle: {
+    fontSize: 22,
+    fontWeight: "bold",
+    marginBottom: 15,
+  },
+  // input: {
+  //   width: "100%",
+  //   borderColor: "#ccc",
+  //   borderWidth: 1,
+  //   padding: 10,
+  //   borderRadius: 5,
+  //   marginBottom: 20,
+  //   fontSize: 16,
+  // },
+
+  formContainer: {
+    width: "100%",
+    gap: 30,
+    paddingHorizontal: 7,
+  },
+
+  btn: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+
+  submitButton: {
+    backgroundColor: "#008080",
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+    borderRadius: 8,
+    marginBottom: 10,
+  },
+
+  submitText: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
+
+  cancelText: {
+    color: "red",
+    fontSize: 16,
+    marginTop: 10,
   },
 });

@@ -1,4 +1,5 @@
 import { View, Text, TextInput, StyleSheet, Platform } from "react-native"
+import type { KeyboardTypeOptions } from "react-native";
 
 interface InputProps {
     name?: string;
@@ -7,19 +8,21 @@ interface InputProps {
     value?: string;
     onChangeText?: (text: string) => void;
     capitalizeFirstLetter?: boolean;
+    keyboardType?: "default" | "email-address" | "numeric" | "phone-pad"
 }
 
 export const Input: React.FC<InputProps> = ({
-    name = "Title",
+    name,
     secure = false,
     placeholder,
     value,
     onChangeText,
     capitalizeFirstLetter = false,
+    keyboardType,
 }) => {
     return (
         <View style={styles.container}>
-            <Text style={styles.label}>{name}</Text>
+            {name ? (<Text style={styles.label}>{name}</Text>):(<></>)}
             <TextInput
                 style={styles.input}
                 placeholder={placeholder ?? `Enter ${name}`}
@@ -28,7 +31,7 @@ export const Input: React.FC<InputProps> = ({
                 secureTextEntry={secure}
                 autoCorrect={false}
                 autoCapitalize={capitalizeFirstLetter ? "words" : "none"}
-            // keybo
+                keyboardType={keyboardType ? keyboardType : "default"}
             />
         </View>
     )

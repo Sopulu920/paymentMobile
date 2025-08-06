@@ -1,11 +1,13 @@
+import { Provider } from "react-redux";
+import { store } from "./redux/store";
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import Home from "./widgets/Home/index";
-import Profile from './widgets/Profile';
-import Login from './widgets/Login/Login';
-import SignUp from "./widgets/SignUp/SignUp"
+import Home from "./screens/Home/index";
+import Profile from './screens/Profile';
+import Login from './screens/Login/Login';
+import SignUp from "./screens/SignUp/SignUp"
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -32,12 +34,18 @@ function TabNavigator() {
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="SignUp" component={SignUp} />
-        <Stack.Screen name="MainTabs" component={TabNavigator} />
-      </Stack.Navigator>
-    </NavigationContainer>
+
+    <Provider store={store}>
+
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="SignUp" component={SignUp} />
+          <Stack.Screen name="MainTabs" component={TabNavigator} />
+        </Stack.Navigator>
+      </NavigationContainer>
+
+    </Provider>
+
   );
 }

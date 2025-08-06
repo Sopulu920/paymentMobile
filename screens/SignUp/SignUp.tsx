@@ -4,6 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useSignupMutation } from "@/redux/api/bankApi";
 
 type RootStackParamList = {
     Login: undefined;
@@ -14,14 +15,34 @@ type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'Login'>;
 export default function SignUp() {
 
     const navigation = useNavigation<NavigationProp>()
+    const [signUp] = useSignupMutation()
 
     const [email, setEmail] = useState("")
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
+    const [phone, setPhone] = useState("")
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
 
     console.log(email, firstName, lastName, password, confirmPassword)
+
+    const handleSign = async () => {
+        try {
+            await signUp({
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                password: password,
+                phone: phone,
+            }).unwrap()
+
+            await console.log("fuck-off")
+
+            navigation.navigate("Login")
+        } catch (err) {
+            console.log(err)
+        }
+    }
 
     return (
 
@@ -61,6 +82,14 @@ export default function SignUp() {
                         />
 
                         <Input
+                            name="Phone"
+                            // capitalizeFirstLetter={true}
+                            value={phone}
+                            onChangeText={setPhone}
+                            keyboardType="numeric"
+                        />
+
+                        <Input
                             name="Password"
                             secure={true}
                             value={password}
@@ -80,10 +109,7 @@ export default function SignUp() {
 
                         <Button
                             title="Sign Up"
-                            onPress={() => {
-                                console.log("login")
-                                navigation.navigate("Login")
-                            }}
+                            onPress={() => handleSign()}
                             color={"green"}
                         // style={{}}
                         />
