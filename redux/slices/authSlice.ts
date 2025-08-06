@@ -1,13 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Data } from "../api/bankApi";
 
 interface AuthState {
-  token: string | null;
-  userEmail: string | null;
+  data: Data | null
 }
 
 const initialState: AuthState = {
-  token: null,
-  userEmail: null,
+  data: null,
 };
 
 const authSlice = createSlice({
@@ -16,14 +15,12 @@ const authSlice = createSlice({
   reducers: {
     setCredentials: (
       state,
-      action: PayloadAction<{ token: string; userEmail: string }>
+      action: PayloadAction<{ data: Data }>
     ) => {
-      state.token = action.payload.token;
-      state.userEmail = action.payload.userEmail;
+      state.data = action.payload.data;
     },
     logout: (state) => {
-      state.token = null;
-      state.userEmail = null;
+      state.data = null;
     },
   },
 });

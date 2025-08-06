@@ -15,7 +15,7 @@ type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'Login'>;
 export default function SignUp() {
 
     const navigation = useNavigation<NavigationProp>()
-    const [signUp] = useSignupMutation()
+    const [signUp, { data: signupData }] = useSignupMutation()
 
     const [email, setEmail] = useState("")
     const [firstName, setFirstName] = useState("")
@@ -23,8 +23,10 @@ export default function SignUp() {
     const [phone, setPhone] = useState("")
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
+    const [error, setError] = useState("")
 
     console.log(email, firstName, lastName, password, confirmPassword)
+    console.log("signUP", signupData)
 
     const handleSign = async () => {
         try {
@@ -36,11 +38,12 @@ export default function SignUp() {
                 phone: phone,
             }).unwrap()
 
-            await console.log("fuck-off")
+            // await console.log("fuck-off")
 
             navigation.navigate("Login")
         } catch (err) {
             console.log(err)
+            setError(`${err}`)
         }
     }
 
@@ -136,6 +139,8 @@ export default function SignUp() {
                 </View>
 
             </KeyboardAvoidingView>
+
+            <Text>{error}</Text>
 
         </SafeAreaView>
     )

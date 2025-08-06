@@ -1,14 +1,36 @@
-import { StyleSheet, View, Text, ScrollView, Dimensions, ImageBackground, Platform, SafeAreaView, Pressable, Modal } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, Dimensions, ImageBackground, Platform, SafeAreaView, Pressable, Modal, RefreshControl } from 'react-native';
 import { Card, Button, Row, StatCard, Greetings, Input } from '@/component';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { PieChart } from 'react-native-chart-kit';
 import { useState } from 'react';
+import { useAppSelector } from '@/redux/hook';
+import { useGetTransactionsQuery } from '@/redux/api/bankApi';
 
 export default function Home() {
 
   const [visibleModal, setVisibleModal] = useState<"transfer" | "deposit" | "withdraw" | null>(null);
   const [amount, setAmount] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
+  const [refreshing, setRefreshing] = useState(false);
+
+
+  const { data: authData } = useAppSelector(state => state.auth)
+  const { data: TransactionHistory, refetch } = useGetTransactionsQuery({
+    user: authData?._id
+  })
+  console.log("fjkoeofkef",authData?._id)
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    try {
+      await refetch(); // 👈 This is from useGetTransactionsQuery
+    } catch (e) {
+      console.error("Refresh failed", e);
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
 
   const handleSubmit = () => {
     if (!amount) return alert("Please enter amount");
@@ -59,15 +81,25 @@ export default function Home() {
     useShadowColorFromDataset: false // optional
   };
 
-  const firstName = "John"
-
-  const lastName = "Doe"
+  console.log("toke", authData)
+  console.log("tokes", TransactionHistory)
+  // console.log("data", userEmail)
+  const firstName = authData?.firstName
+  const lastName = authData?.lastName
+  const balance = authData?.accountBalance
+  const number = authData?.accountNumber
+  const creationDate = authData?.createdAt
 
   return (
 
     <SafeAreaView>
 
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <ScrollView
+        contentContainerStyle={styles.scrollContainer}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
 
         <ImageBackground
           source={require("../../assets/Image/bank.png")}
@@ -98,9 +130,9 @@ export default function Home() {
           <View style={styles.cardWrapper}>
 
             <Card
-              amount={9876}
-              cardNumber={20986753456786424589}
-              date={cardDate(new Date().toString())}
+              amount={balance}
+              cardNumber={number}
+              date={cardDate(creationDate ?? "")}
             />
 
           </View>

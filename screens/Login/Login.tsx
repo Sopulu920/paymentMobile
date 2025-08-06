@@ -4,6 +4,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useState } from "react";
+import { useLoginMutation } from "@/redux/api/bankApi";
+import { useAppDispatch } from "@/redux/hook";
+import { setCredentials } from "@/redux/slices/authSlice";
 
 
 type RootStackParamList = {
@@ -13,14 +16,38 @@ type RootStackParamList = {
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'MainTabs', 'SignUp'>;
 
-export default function Login() {
 
+export default function Login() {
     const navigation = useNavigation<NavigationProp>()
+    const [login, { data: loginData }] = useLoginMutation()
+    const dispatch = useAppDispatch()
 
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
     console.log(email, password)
+    console.log("login", loginData)
+
+
+    const handleLogin = async () => {
+        try {
+            const response = await login({
+                email: email,
+                password: password,
+            }).unwrap()
+
+            // Store login data in Redux
+            dispatch(setCredentials({
+                data: response.data
+            }))
+            console.log("respose", response)
+            navigation.navigate("MainTabs")
+
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
     return (
 
         <SafeAreaView style={styles.Container}>
@@ -57,10 +84,7 @@ export default function Login() {
 
                         <Button
                             title="Login"
-                            onPress={() => {
-                                console.log("login")
-                                navigation.navigate("MainTabs")
-                            }}
+                            onPress={() => { handleLogin() }}
                             color={"green"}
                         // style={{}}
                         />
@@ -142,3 +166,5 @@ const styles = StyleSheet.create({
     },
 
 })
+
+// export const UserData = loginData

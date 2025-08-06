@@ -1,13 +1,16 @@
 import { View, Text, StyleSheet, Pressable, SafeAreaView } from "react-native"
 import { ProfileImage } from "@/component"
 import { Row } from "@/component"
+import { useAppSelector } from '@/redux/hook';
 
 export default function Profile() {
 
-    const firstName = "John"
-    const lastName = "Doe"
-    const AccountNumber = "938457693902082747"
+      const { data: authData } = useAppSelector(state => state.auth)
+    
 
+    const firstName = authData?.firstName
+    const lastName = authData?.lastName
+    const AccountNumber = authData?.accountNumber
     return (
 
         <SafeAreaView>
