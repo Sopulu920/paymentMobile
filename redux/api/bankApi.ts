@@ -2,56 +2,52 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { API_URL } from "@env"
 
 export interface Data {
-    authToken: string
-    _id: string,
-    firstName: string,
-    lastName: string,
-    email: string,
-    accountNumber: string,
-    accountBalance: number,
-    isEmailVerified: boolean,
-    phone: string,
-    isPhoneVerified: boolean,
-    role: string,
-    isDeleted: boolean,
-    createdAt: string,
+    authToken?: string
+    _id?: string,
+    firstName?: string,
+    lastName?: string,
+    email?: string,
+    accountNumber?: string,
+    accountBalance?: number,
+    isEmailVerified?: boolean,
+    phone?: string,
+    isPhoneVerified?: boolean,
+    role?: string,
+    isDeleted?: boolean,
+    createdAt?: string,
 }
 
 export interface Transaction {
-  _id: string;
-  amount: number;
-  createdAt: string;
-  isDeleted: boolean;
-  modeOfTransaction: "deposit" | "withdraw" | "transfer";
-  newBalance: number;
-  prevBalance: number;
-  transactionType: "credit" | "debit";
-  updatedAt: string;
-  user: string;
+    _id: string;
+    amount: number;
+    createdAt: string;
+    isDeleted: boolean;
+    modeOfTransaction: "deposit" | "withdraw" | "transfer";
+    newBalance: number;
+    prevBalance: number;
+    transactionType: "credit" | "debit";
+    updatedAt: string;
+    user: string;
 }
 
 export interface GetTransactionsResponse {
-  data: Transaction[];
-  message: string;
-  results: number;
-  status: string;
+    data: Transaction[];
+    message: string;
+    results: number;
+    status: string;
 }
 
+export interface GetUserResponse {
+    data: Data;
+    message: string;
+    // results: number;
+    status: string;
+}
 
-// export interface Transaction {
-//     _id: string;
-//     fromUserId: string;
-//     toUserId: string;
-//     amount: number;
-//     type: 'deposit' | 'withdraw' | 'transfer';
-//     status: 'pending' | 'completed' | 'failed';
-//     createdAt: string;
-// }
-
-// export interface GetTransactionsResponse {
-//     data: Transaction[];
-//     total: number;
-// }
+export interface receiver {
+    accountName?: string
+    accountNumber?: number
+}
 
 export const bankApi = createApi({
     reducerPath: "bankApi",
@@ -71,23 +67,38 @@ export const bankApi = createApi({
                 body: userData,
             }),
         }),
-        deposit: builder.mutation<{ message: string }, { amount: number }>({
+        deposit: builder.mutation<{ message: string }, { amount: number, userId: string }>({
             query: (data) => ({
                 url: "/account/deposit",
                 method: "POST",
                 body: data,
             }),
         }),
-        withdraw: builder.mutation<{ message: string }, { amount: number }>({
+        withdraw: builder.mutation<{ message: string }, { amount: number, userId: string }>({
             query: (data) => ({
                 url: "/account/withdraw",
                 method: "POST",
                 body: data,
             }),
         }),
-        transfer: builder.mutation<{ message: string }, { toUserId: string; amount: number }>({
+        transfer: builder.mutation<{ message: string }, {
+            senderId: string;
+            receiverAccountNumber: number;
+            amount: number
+        }>({
             query: (data) => ({
                 url: "/account/transfer",
+                method: "POST",
+                body: data,
+            }),
+        }),
+        verifyTransfer: builder.mutation<receiver, {
+            // senderId: string;
+            accountNumber: number;
+            // amount: number
+        }>({
+            query: (data) => ({
+                url: "/account/verify-account",
                 method: "POST",
                 body: data,
             }),
@@ -104,6 +115,18 @@ export const bankApi = createApi({
                 };
             },
         }),
+        getUser: builder.query<GetUserResponse, { id?: string }>({
+            query: ({ id }) => {
+                const params: Record<string, string> = {};
+                if (id) params.id = id;
+
+                return {
+                    url: `/users/${id}`,
+                    method: "GET",
+                    params,
+                };
+            },
+        }),
     }),
 });
 
@@ -113,5 +136,7 @@ export const {
     useDepositMutation,
     useWithdrawMutation,
     useTransferMutation,
+    useVerifyTransferMutation,
     useGetTransactionsQuery,
+    useGetUserQuery,
 } = bankApi;

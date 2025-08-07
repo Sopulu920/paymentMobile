@@ -1,11 +1,10 @@
-import { StyleSheet, View, Text, ScrollView, Dimensions, ImageBackground, Platform, SafeAreaView, Pressable, Modal, RefreshControl } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, Dimensions, ImageBackground, Platform, SafeAreaView, Pressable, Modal, RefreshControl, ActivityIndicator } from 'react-native';
 import { Card, Button, Row, StatCard, Greetings, Input } from '@/component';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { PieChart } from 'react-native-chart-kit';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAppSelector } from '@/redux/hook';
-import { useGetTransactionsQuery } from '@/redux/api/bankApi';
-import { Transaction } from '@/redux/api/bankApi';
+import { useGetTransactionsQuery, Transaction, useDepositMutation, useWithdrawMutation, useTransferMutation, useVerifyTransferMutation } from '@/redux/api/bankApi';
 
 
 export default function Home() {
@@ -13,6 +12,7 @@ export default function Home() {
   const [visibleModal, setVisibleModal] = useState<"transfer" | "deposit" | "withdraw" | null>(null);
   const [amount, setAmount] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
+  const [accountHolder, setAccountHolder] = useState<string|undefined>("");
   const [refreshing, setRefreshing] = useState(false);
 
 
@@ -20,6 +20,26 @@ export default function Home() {
   const { data: transactionHistory, refetch } = useGetTransactionsQuery({
     user: authData?._id
   })
+  const [deposit] = useDepositMutation()
+  const [withdraw] = useWithdrawMutation()
+  const [transfer] = useTransferMutation()
+  const [postAccountNumber, { data: accountHolderName }] = useVerifyTransferMutation()
+
+  const verify = async (number: number) => {
+    try {
+      await postAccountNumber({
+        accountNumber: number
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  useEffect(() => {
+    verify(Number("3262733393"))
+    setAccountHolder(accountHolderName?.accountName)
+
+  }, [accountNumber]);
 
   // console.log("fjkoeofkef",authData?._id)
 
@@ -30,16 +50,60 @@ export default function Home() {
     } catch (e) {
       console.error("Refresh failed", e);
     } finally {
+      // setTimeout(() => {
       setRefreshing(false);
+      // }, 5000);      
     }
   };
 
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!amount) return alert("Please enter amount");
-    alert(`${visibleModal?.toUpperCase()} of ₦${amount} successful`);
-    setAmount("");
-    setVisibleModal(null);
+
+
+    try {
+      if (visibleModal === "deposit") {
+
+        await deposit({
+
+          userId: authData?._id ?? "",
+          amount: Number(amount)
+
+        }).unwrap()
+      }
+
+      if (visibleModal === "withdraw") {
+
+        await withdraw({
+
+          userId: authData?._id ?? "",
+          amount: Number(amount)
+
+        }).unwrap()
+      }
+
+      if (visibleModal === "transfer") {
+
+        await transfer({
+
+          senderId: authData?._id ?? "",
+          receiverAccountNumber: Number(accountNumber),
+          amount: Number(amount)
+
+        }).unwrap()
+      }
+
+
+
+    } catch (err) {
+      console.log(err)
+    } finally {
+      await refetch()
+      setVisibleModal(null);
+      alert(`${visibleModal?.toUpperCase()} of ₦${amount} successful`);
+      setAmount("");
+    }
+
   };
 
   const cardDate = (date: string) => {
@@ -49,16 +113,36 @@ export default function Home() {
     return `${monthFormat}/${year}`;
   };
 
-  const income = transactionHistory?.data
-  ?.filter((txn: Transaction) => txn.transactionType === "credit")
-  ?.reduce((sum, txn) => sum + txn.amount, 0) ?? 0;
+  function formatNumber(amount: number | string): string {
+    const num = typeof amount === 'string' ? parseFloat(amount) : amount;
 
-const expenses = transactionHistory?.data
-  ?.filter((txn: Transaction) => txn.transactionType === "debit")
-  ?.reduce((sum, txn) => sum + txn.amount, 0) ?? 0;
+    if (isNaN(num)) {
+      throw new Error('Invalid number input');
+    }
 
+    return new Intl.NumberFormat(undefined, {
+      style: 'decimal',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(num);
+  }
 
-  console.log("Income:", income);   // 2700000
+  const incomes = transactionHistory?.data
+    ?.filter((txn: Transaction) => txn.transactionType === "credit")
+    ?.reduce((sum, txn) => sum + txn.amount, 0) ?? 0;
+
+  const expense = transactionHistory?.data
+    ?.filter((txn: Transaction) => txn.transactionType === "debit")
+    ?.reduce((sum, txn) => sum + txn.amount, 0) ?? 0;
+
+  // const income = formatNumber(incomes ?? 0)
+  // const expenses = formatNumber(expense ?? 0)
+
+  // // const income
+  // // console.log("Income:", );
+  // // console.log("kdjfjf", )
+  // console.log("Income:", income);
+  // console.log("kdjfjf", expenses)
   // console.log("Expense:", expense); // 0 (no debit transactions yet)
 
 
@@ -69,14 +153,14 @@ const expenses = transactionHistory?.data
   const data = [
     {
       name: "INCOME",
-      population: income,
+      population: incomes,
       color: "darkgreen",
       // legendFontColor: "#7F7F7F",
       legendFontSize: 15
     },
     {
       name: "EXPENSES",
-      population: expenses,
+      population: expense,
       color: "#F00",
       // legendFontColor: "#7F7F7F",
       legendFontSize: 15
@@ -97,16 +181,35 @@ const expenses = transactionHistory?.data
     useShadowColorFromDataset: false // optional
   };
 
+
   console.log("toke", authData)
   console.log("tokes", transactionHistory?.data)
   // console.log("data", userEmail)
   const firstName = authData?.firstName
   const lastName = authData?.lastName
   const transactions = transactionHistory?.data || [];
-  const lastTransaction = transactions[transactions.length - 1];
-  const balance = lastTransaction?.newBalance ?? authData?.accountBalance
+  const lastTransaction = transactions[0];
+  const balance = formatNumber(lastTransaction?.newBalance ?? 0)
   const number = authData?.accountNumber
   const creationDate = authData?.createdAt
+  // const receiver = accountHolderName
+  console.log("kliofeifjie", accountHolder)
+
+  if (refreshing === true) {
+    return (
+      <SafeAreaView
+        style={
+          {
+            height: screenHeight,
+            justifyContent: "center",
+            alignItems: 'center'
+          }
+        }
+      >
+        <ActivityIndicator size="large" color="#0000ff" />
+      </SafeAreaView>
+    )
+  }
 
   return (
 
@@ -219,7 +322,7 @@ const expenses = transactionHistory?.data
                     />
                   }
                   title='INCOME'
-                  value={income}
+                  value={incomes}
                   cardColour='#004225'
                   iconColour='#50C878'
                 />
@@ -236,7 +339,7 @@ const expenses = transactionHistory?.data
                     />
                   }
                   title='EXPENSES'
-                  value={expenses}
+                  value={expense}
                   cardColour='#FF0000'
                   iconColour='#E44D2E'
                 />
@@ -289,6 +392,8 @@ const expenses = transactionHistory?.data
             <Text style={modalStyles.modalTitle}>
               {visibleModal?.toUpperCase()}
             </Text>
+
+            <Text>{accountHolder}</Text>
 
             <View style={modalStyles.formContainer}>
 
