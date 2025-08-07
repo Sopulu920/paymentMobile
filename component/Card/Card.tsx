@@ -17,7 +17,7 @@ export const Card: React.FC<CardProps> = ({
             <View style={styles.totalContainer}>
                 <View>
                     <Text style={styles.total}>Total Balance</Text>
-                    <Text style={styles.money}>{amount}</Text>
+                    <Text style={styles.money}>₦{amount}</Text>
                 </View>
 
                 <View style={styles.masterCardContainer}>

@@ -5,6 +5,8 @@ import { PieChart } from 'react-native-chart-kit';
 import { useState } from 'react';
 import { useAppSelector } from '@/redux/hook';
 import { useGetTransactionsQuery } from '@/redux/api/bankApi';
+import { Transaction } from '@/redux/api/bankApi';
+
 
 export default function Home() {
 
@@ -15,10 +17,11 @@ export default function Home() {
 
 
   const { data: authData } = useAppSelector(state => state.auth)
-  const { data: TransactionHistory, refetch } = useGetTransactionsQuery({
+  const { data: transactionHistory, refetch } = useGetTransactionsQuery({
     user: authData?._id
   })
-  console.log("fjkoeofkef",authData?._id)
+
+  // console.log("fjkoeofkef",authData?._id)
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -46,9 +49,22 @@ export default function Home() {
     return `${monthFormat}/${year}`;
   };
 
-  const income = 21500000
+  const income = transactionHistory?.data
+  ?.filter((txn: Transaction) => txn.transactionType === "credit")
+  ?.reduce((sum, txn) => sum + txn.amount, 0) ?? 0;
 
-  const expenses = 2800000
+const expenses = transactionHistory?.data
+  ?.filter((txn: Transaction) => txn.transactionType === "debit")
+  ?.reduce((sum, txn) => sum + txn.amount, 0) ?? 0;
+
+
+  console.log("Income:", income);   // 2700000
+  // console.log("Expense:", expense); // 0 (no debit transactions yet)
+
+
+  // const income = 21500000
+
+  // const expenses = 2800000
 
   const data = [
     {
@@ -82,11 +98,13 @@ export default function Home() {
   };
 
   console.log("toke", authData)
-  console.log("tokes", TransactionHistory)
+  console.log("tokes", transactionHistory?.data)
   // console.log("data", userEmail)
   const firstName = authData?.firstName
   const lastName = authData?.lastName
-  const balance = authData?.accountBalance
+  const transactions = transactionHistory?.data || [];
+  const lastTransaction = transactions[transactions.length - 1];
+  const balance = lastTransaction?.newBalance ?? authData?.accountBalance
   const number = authData?.accountNumber
   const creationDate = authData?.createdAt
 

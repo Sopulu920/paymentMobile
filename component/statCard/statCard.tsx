@@ -31,7 +31,7 @@ export const StatCard: React.FC<statProp> = ({
                 </Text>
 
                 <Text style={styles.valueContent}>
-                    {value}
+                    ₦{value}
                 </Text>
 
             </View>

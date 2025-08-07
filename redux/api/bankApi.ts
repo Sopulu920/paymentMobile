@@ -17,6 +17,27 @@ export interface Data {
     createdAt: string,
 }
 
+export interface Transaction {
+  _id: string;
+  amount: number;
+  createdAt: string;
+  isDeleted: boolean;
+  modeOfTransaction: "deposit" | "withdraw" | "transfer";
+  newBalance: number;
+  prevBalance: number;
+  transactionType: "credit" | "debit";
+  updatedAt: string;
+  user: string;
+}
+
+export interface GetTransactionsResponse {
+  data: Transaction[];
+  message: string;
+  results: number;
+  status: string;
+}
+
+
 // export interface Transaction {
 //     _id: string;
 //     fromUserId: string;
@@ -71,12 +92,17 @@ export const bankApi = createApi({
                 body: data,
             }),
         }),
-        getTransactions: builder.query<{/*GetTransactionsResponse*/}, { user?: string }>({
-            query: (user) => ({
-                url: `/transactions`,
-                method: "GET",
-                params: {user},
-            }),
+        getTransactions: builder.query<GetTransactionsResponse, { user?: string }>({
+            query: ({ user }) => {
+                const params: Record<string, string> = {};
+                if (user) params.user = user;
+
+                return {
+                    url: "/transactions",
+                    method: "GET",
+                    params,
+                };
+            },
         }),
     }),
 });
