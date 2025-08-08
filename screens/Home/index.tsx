@@ -2,7 +2,7 @@ import { StyleSheet, View, Text, ScrollView, Dimensions, ImageBackground, Platfo
 import { Card, Button, Row, StatCard, Greetings, Input } from '@/component';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { PieChart } from 'react-native-chart-kit';
-import { useEffect, useState } from 'react';
+import { ReactElement, ReactEventHandler, useEffect, useState } from 'react';
 import { useAppSelector } from '@/redux/hook';
 import { useGetTransactionsQuery, Transaction, useDepositMutation, useWithdrawMutation, useTransferMutation, useVerifyTransferMutation } from '@/redux/api/bankApi';
 
@@ -12,8 +12,9 @@ export default function Home() {
   const [visibleModal, setVisibleModal] = useState<"transfer" | "deposit" | "withdraw" | null>(null);
   const [amount, setAmount] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
-  const [accountHolder, setAccountHolder] = useState<string|undefined>("");
+  const [accountHolder, setAccountHolder] = useState<string | undefined>("");
   const [refreshing, setRefreshing] = useState(false);
+  const [verifiedAccount, setVerifiedAccount] = useState(false)
 
 
   const { data: authData } = useAppSelector(state => state.auth)
@@ -25,23 +26,42 @@ export default function Home() {
   const [transfer] = useTransferMutation()
   const [postAccountNumber, { data: accountHolderName }] = useVerifyTransferMutation()
 
-  const verify = async (number: number) => {
-    try {
-      await postAccountNumber({
-        accountNumber: number
-      })
-    } catch (err) {
-      console.log(err)
+  // const verify = async (number: number) => {
+  //   try {
+  //     await postAccountNumber({
+  //       accountNumber: number
+  //     })
+  //   } catch (err) {
+  //     console.log(err)
+  //   }
+  // }
+
+  const handleTransfer = async (text: string) => {
+    setAccountNumber(text);
+
+    if (text.length === 10) {
+      try {
+        await postAccountNumber({
+          accountNumber: Number(text)
+        }).unwrap();
+
+        setVerifiedAccount(true)
+
+      } catch (err) {
+        console.log("Account verification failed:", err);
+        setAccountHolder("Invaild Account Number");
+        setVerifiedAccount(false)
+      }
+    } else {
+      setAccountHolder(undefined); // clear if not valid
     }
-  }
+  };
 
-  useEffect(() => {
-    verify(Number("3262733393"))
-    setAccountHolder(accountHolderName?.accountName)
-
-  }, [accountNumber]);
-
-  // console.log("fjkoeofkef",authData?._id)
+  setTimeout(() => {
+    if (accountHolderName?.data?.accountName !== undefined && verifiedAccount === true && accountNumber.length === 10) {
+      setAccountHolder(accountHolderName?.data?.accountName)
+    }
+  }, 30);
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -403,7 +423,7 @@ export default function Home() {
                   placeholder="Enter account number"
                   keyboardType="numeric"
                   value={accountNumber}
-                  onChangeText={setAccountNumber}
+                  onChangeText={handleTransfer}
                 // style={modalStyles.input}
                 />
               )}

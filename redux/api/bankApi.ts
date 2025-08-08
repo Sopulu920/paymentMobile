@@ -45,8 +45,12 @@ export interface GetUserResponse {
 }
 
 export interface receiver {
-    accountName?: string
-    accountNumber?: number
+    status?: string
+    message?: string
+    data?: {
+        accountName?: string
+        accountNumber?: number
+    }
 }
 
 export const bankApi = createApi({
