@@ -21,8 +21,22 @@ function TabNavigator() {
           let icon = route.name === "Home" ? "home" : "user";
           return <FontAwesome5 name={icon} size={size} color={color} solid />;
         },
-        tabBarActiveTintColor: "green",
+        tabBarActiveTintColor: "#61E838",
         tabBarInactiveTintColor: "gray",
+        tabBarStyle: {
+          position: 'absolute',
+          bottom: 10,
+          left: 10,
+          right: 10,
+          margin: 10,
+          elevation: 5,
+          shadowColor: '#000',
+          shadowOpacity: 0.1,
+          shadowRadius: 5,
+          borderRadius: 25,
+          backgroundColor: "#FFFFFFCC",
+          height: 50,
+        },
         headerShown: false
       })}
     >

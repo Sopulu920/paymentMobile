@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     cardContainer: {
         padding: 16,
         margin: 16,
-        backgroundColor: '#004225',
+        backgroundColor: '#61E838CC',
         borderRadius: 20,
         gap: 100,
         elevation: 15,
@@ -61,15 +61,17 @@ const styles = StyleSheet.create({
     },
 
     total: {
-        color: 'gray',
+        color: '#F5F5F5',
     },
 
     money: {
         fontSize: 20,
+        color: "#FFFF",
     },
 
     number: {
         fontSize: 17,
+        color: "#FFFF",
     },
 
     img: {
@@ -87,7 +89,7 @@ const styles = StyleSheet.create({
     red: {
         width: size,
         height: size,
-        backgroundColor: "red",
+        backgroundColor: "#F01601",
         borderRadius: 50,
         position: "absolute",
         opacity: 0.9,
@@ -96,7 +98,7 @@ const styles = StyleSheet.create({
     green: {
         width: size,
         height: size,
-        backgroundColor: "orange",
+        backgroundColor: "#F09F18",
         borderRadius: 50,
         position: "absolute",
         left: 35,

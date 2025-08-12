@@ -1,6 +1,5 @@
 import { View, Text, TextInput, StyleSheet, Platform, Pressable } from "react-native"
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5"
-import type { KeyboardTypeOptions } from "react-native";
 import { useState } from "react";
 
 interface InputProps {
@@ -23,7 +22,7 @@ export const Input: React.FC<InputProps> = ({
     keyboardType,
 }) => {
 
-    // const [secure, setSecure] = useState(false)
+    const [show, setShow] = useState(true)
 
     return (
         <View style={styles.container}>
@@ -33,24 +32,26 @@ export const Input: React.FC<InputProps> = ({
                 placeholder={placeholder ?? `Enter ${name}`}
                 value={value}
                 onChangeText={onChangeText}
-                secureTextEntry={secure}
+                secureTextEntry={secure && show}
                 autoCorrect={false}
                 autoCapitalize={capitalizeFirstLetter ? "words" : "none"}
                 keyboardType={keyboardType ? keyboardType : "default"}
             />
             <Pressable
-                // onPress={ }
+                onPress={() => setShow(!show)}
             >
                 {secure &&
                     (<View style={styles.eye}>
-                        {!secure ? (<FontAwesome5
-                            name="eye"
+                        {!show ? (<FontAwesome5
+                            name="eye-slash"
                             size={18}
+                            color="grey"
                         />)
                             :
                             (<FontAwesome5
-                                name="eye-slash"
+                                name="eye"
                                 size={18}
+                                color="grey"
                             />)}
                     </View>)
                 }
@@ -79,16 +80,18 @@ const styles = StyleSheet.create({
 
     input: {
         borderWidth: 2,
-        borderColor: "#639354",
+        borderColor: "#6393544D",
+        
         borderRadius: 50,
-        height: 58,
+        lineHeight: 18,
         padding: 20,
+        // backgroundColor: "transparent"
     },
 
     eye: {
         position: "absolute",
         right: 20,
-        bottom: 20,
+        bottom: 30,
     },
 
 })

@@ -1,8 +1,8 @@
 import { StyleSheet, View, Text, ScrollView, Dimensions, ImageBackground, Platform, SafeAreaView, Pressable, Modal, RefreshControl, ActivityIndicator } from 'react-native';
-import { Card, Button, Row, StatCard, Greetings, Input } from '@/component';
+import { Card, Button, Row, StatCard, Greetings, Input, ProfileImage } from '@/component';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { PieChart } from 'react-native-chart-kit';
-import { ReactElement, ReactEventHandler, useEffect, useState } from 'react';
+import { PieChart,LineChart } from 'react-native-chart-kit';
+import { useState } from 'react';
 import { useAppSelector } from '@/redux/hook';
 import { useGetTransactionsQuery, Transaction, useDepositMutation, useWithdrawMutation, useTransferMutation, useVerifyTransferMutation } from '@/redux/api/bankApi';
 
@@ -174,14 +174,14 @@ export default function Home() {
     {
       name: "INCOME",
       population: incomes,
-      color: "darkgreen",
+      color: "#61E838",
       // legendFontColor: "#7F7F7F",
       legendFontSize: 15
     },
     {
       name: "EXPENSES",
       population: expense,
-      color: "#F00",
+      color: "#F01601",
       // legendFontColor: "#7F7F7F",
       legendFontSize: 15
     },
@@ -214,6 +214,18 @@ export default function Home() {
   const creationDate = authData?.createdAt
   // const receiver = accountHolderName
   console.log("kliofeifjie", accountHolder)
+
+//   const datag = {
+//   labels: ["January", "February", "March", "April", "May", "June"],
+//   datasets: [
+//     {
+//       data: [20, 45, 28, 80, 99, 43],
+//       color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // optional
+//       strokeWidth: 2 // optional
+//     }
+//   ],
+//   legend: ["Rainy Days"] // optional
+// };
 
   if (refreshing === true) {
     return (
@@ -260,11 +272,22 @@ export default function Home() {
           >
             {/* <Text>ggggggggggggggggg </Text> */}
           </View>
-          <View style={styles.greet}>
 
-            <Greetings
-              name={`${firstName} ${lastName}`}
+          <View style={styles.greetWrapper}>
+
+            <ProfileImage
+              firstName={`${firstName}`}
+              lastName={`${lastName}`}
+              size={70}
             />
+
+            <View style={styles.greet}>
+
+              <Greetings
+                name={`${firstName} ${lastName}`}
+              />
+
+            </View>
 
           </View>
 
@@ -282,7 +305,7 @@ export default function Home() {
 
             <Row title="Services">
 
-              <View>
+              <View style={styles.transaction}>
 
                 <Button
                   onPress={() => setVisibleModal("transfer")}
@@ -297,7 +320,7 @@ export default function Home() {
 
               </View>
 
-              <View>
+              <View style={styles.transaction}>
 
                 <Button
                   onPress={() => setVisibleModal("deposit")}
@@ -312,7 +335,7 @@ export default function Home() {
 
               </View>
 
-              <View>
+              <View style={styles.transaction}>
 
                 <Button
                   onPress={() => setVisibleModal("withdraw")}
@@ -387,6 +410,19 @@ export default function Home() {
               />
 
             </Row>
+
+            {/* <Row>
+
+              <LineChart
+                data={datag}
+                width={300}
+                height={256}
+                verticalLabelRotation={30}
+                chartConfig={chartConfig}
+                bezier
+              />
+
+            </Row> */}
 
             {/* <Input
             // name='jhgg'
@@ -507,10 +543,24 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  greet: {
+  greetWrapper: {
+    flexDirection: "row",
+    gap: 15,
     marginLeft: 15,
     marginTop: Platform.OS === "ios" ? 60 : 40,
+    // justifyContent: "center",
+    alignItems: "center",
   },
+
+  greet: {
+
+  },
+
+  transaction:{
+    justifyContent: "center",
+    alignItems: "center",
+    },
+
 });
 
 const modalStyles = StyleSheet.create({

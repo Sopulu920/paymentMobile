@@ -41,12 +41,12 @@ const styles = StyleSheet.create({
 
     greet: {
         fontSize: 24,
-fontWeight:400,
-        color: "darkgreen",
+        fontWeight: 400,
+        // color: "darkgreen",
     },
 
     person: {
-        fontSize: 38,
+        fontSize: 28,
         fontWeight: 600,
         // color: "white",
     },

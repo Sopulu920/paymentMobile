@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text, Button, Dimensions, Pressable, KeyboardAvoidingView } from "react-native";
+import { View, StyleSheet, Text, Dimensions, Pressable, KeyboardAvoidingView, ScrollView, RefreshControl, ActivityIndicator } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Input } from "@/component";
@@ -21,14 +21,33 @@ type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'MainTabs', 
 
 export default function Login() {
     const navigation = useNavigation<NavigationProp>()
-    const [login, { data: loginData }] = useLoginMutation()
+    const [login, { data: loginData, isLoading }] = useLoginMutation()
     const dispatch = useAppDispatch()
 
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [refreshing, setRefreshing] = useState(false);
 
     console.log(email, password)
     console.log("login", loginData)
+
+    const clearField = () => {
+        setEmail("")
+        setPassword("")
+    }
+    const onRefresh = async () => {
+        setRefreshing(true);
+        try {
+            await clearField()
+            //   await refetch(); // 👈 This is from useGetTransactionsQuery
+        } catch (e) {
+            console.error("Refresh failed", e);
+        } finally {
+            // setTimeout(() => {
+            setRefreshing(false);
+            // }, 5000);      
+        }
+    };
 
 
     const handleLogin = async () => {
@@ -50,6 +69,22 @@ export default function Login() {
         }
     }
 
+    if (refreshing || isLoading === true) {
+        return (
+            <SafeAreaView
+                style={
+                    {
+                        height: screenHeight,
+                        justifyContent: "center",
+                        alignItems: 'center'
+                    }
+                }
+            >
+                <ActivityIndicator size="large" color="#0000ff" />
+            </SafeAreaView>
+        )
+    }
+
     return (
 
         <SafeAreaView style={styles.Container}>
@@ -60,52 +95,59 @@ export default function Login() {
                 style={{ width: "100%" }}
             >
 
-                <View style={styles.logoContainer}>
+                <ScrollView
+                    // contentContainerStyle={styles.scrollContainer}
+                    refreshControl={
+                        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+                    showsVerticalScrollIndicator={false}
+                >
 
-                    <FontAwesome5
-                        name="university"
-                        size={35}
-                        color="#67BE4D"
-                    />
+                    <View style={styles.logoContainer}>
 
-                    <Text style={styles.logoText}>
-                        PAY MOBILE
-                    </Text>
+                        <FontAwesome5
+                            name="university"
+                            size={35}
+                            color="#67BE4D"
+                        />
 
-                </View>
+                        <Text style={styles.logoText}>
+                            PAY MOBILE
+                        </Text>
 
-                <View style={styles.welcomeContainer}>
+                    </View>
 
-                    <Text style={styles.welcomeText}>
-                        Welcome !
-                    </Text>
-                    <Text>
-                        Enter Your Account
-                    </Text>
+                    <View style={styles.welcomeContainer}>
 
-                </View>
+                        <Text style={styles.welcomeText}>
+                            Welcome !
+                        </Text>
+                        <Text>
+                            Enter Your Account
+                        </Text>
 
-                <View style={styles.formContainer}>
+                    </View>
 
-                    <Input
-                        name="Email Address"
-                        placeholder="example@gmail.com"
-                        value={email}
-                        onChangeText={setEmail}
-                    />
+                    <View style={styles.formContainer}>
 
-                    <Input
-                        name="Password"
-                        placeholder="Password"
-                        value={password}
-                        onChangeText={setPassword}
-                        secure={true}
-                    />
+                        <Input
+                            name="Email Address"
+                            placeholder="example@gmail.com"
+                            value={email}
+                            onChangeText={setEmail}
+                        />
 
-                    {/* <LinearGradient
+                        <Input
+                            name="Password"
+                            placeholder="Password"
+                            value={password}
+                            onChangeText={setPassword}
+                            secure={true}
+                        />
+
+                        {/* <LinearGradient
                         
                     /> */}
-                    {/* <LinearGradient
+                        {/* <LinearGradient
                         colors={['#ff7e5f', '#feb47b']}
                         start={{ x: 0, y: 0 }}
                         end={{ x: 1, y: 0 }}
@@ -115,18 +157,42 @@ export default function Login() {
                     </LinearGradient> */}
 
 
-                    <Pressable
-                        style={styles.loginBtn}
-                    >
+                        <Pressable
+                            style={styles.loginBtn}
+                            onPress={handleLogin}
+                        >
 
-                        <Text style={styles.loginText}>
-                            LOG IN
-                        </Text>
+                            <Text style={styles.loginText}>
+                                LOGIN
+                            </Text>
 
-                    </Pressable>
+                        </Pressable>
 
-                </View>
-                {/* 
+                    </View>
+
+                    <View style={styles.signUp}>
+
+                        <View style={styles.line} />
+
+                        <View style={{ flexDirection: "row", gap: 5 }}>
+
+                            <Text>
+                                I don't have an Account ?
+                            </Text>
+
+                            <Pressable
+
+                                onPress={() => navigation.navigate("SignUp")}
+                            >
+                                <Text style={styles.signUpText}>Sign Up</Text>
+                            </Pressable>
+
+                        </View>
+
+                        <View style={styles.line} />
+
+                    </View>
+                    {/* 
                 <View style={styles.formContainer}>
 
                     <Text style={styles.formTitle}>WELCOME</Text>
@@ -176,6 +242,7 @@ export default function Login() {
                     </Pressable>
 
                 </View> */}
+                </ScrollView>
 
             </KeyboardAvoidingView>
 
@@ -246,6 +313,28 @@ const styles = StyleSheet.create({
         fontWeight: 600,
     },
 
+    signUp: {
+        flexDirection: "row",
+        gap: 12,
+        marginTop: 56,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+
+    signUpText: {
+        // fontSize: 26,
+        color: "green",
+        textDecorationLine: "underline",
+        fontWeight: 600,
+    },
+
+    line: {
+        flex: 1,
+        height: 1,
+        backgroundColor: "#000000ff"
+    },
+
+
     // formField: {
     //     gap: 10,
 
@@ -258,17 +347,6 @@ const styles = StyleSheet.create({
     //     textAlign: "center"
     // },
 
-    // signUp: {
-    //     flexDirection: "row",
-    //     gap: 20,
-    //     margin: 16,
-    //     justifyContent: "center",
-    // },
-
-    // signUpText: {
-    //     // fontSize: 26,
-    //     color: "green"
-    // },
 
 })
 
