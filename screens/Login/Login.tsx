@@ -1,4 +1,6 @@
 import { View, StyleSheet, Text, Button, Dimensions, Pressable, KeyboardAvoidingView } from "react-native";
+import LinearGradient from "react-native-linear-gradient";
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Input } from "@/component";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
@@ -58,6 +60,73 @@ export default function Login() {
                 style={{ width: "100%" }}
             >
 
+                <View style={styles.logoContainer}>
+
+                    <FontAwesome5
+                        name="university"
+                        size={35}
+                        color="#67BE4D"
+                    />
+
+                    <Text style={styles.logoText}>
+                        PAY MOBILE
+                    </Text>
+
+                </View>
+
+                <View style={styles.welcomeContainer}>
+
+                    <Text style={styles.welcomeText}>
+                        Welcome !
+                    </Text>
+                    <Text>
+                        Enter Your Account
+                    </Text>
+
+                </View>
+
+                <View style={styles.formContainer}>
+
+                    <Input
+                        name="Email Address"
+                        placeholder="example@gmail.com"
+                        value={email}
+                        onChangeText={setEmail}
+                    />
+
+                    <Input
+                        name="Password"
+                        placeholder="Password"
+                        value={password}
+                        onChangeText={setPassword}
+                        secure={true}
+                    />
+
+                    {/* <LinearGradient
+                        
+                    /> */}
+                    {/* <LinearGradient
+                        colors={['#ff7e5f', '#feb47b']}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 0 }}
+                        style={{ height: 100, width: '100%' }}
+                    >
+
+                    </LinearGradient> */}
+
+
+                    <Pressable
+                        style={styles.loginBtn}
+                    >
+
+                        <Text style={styles.loginText}>
+                            LOG IN
+                        </Text>
+
+                    </Pressable>
+
+                </View>
+                {/* 
                 <View style={styles.formContainer}>
 
                     <Text style={styles.formTitle}>WELCOME</Text>
@@ -106,7 +175,7 @@ export default function Login() {
                         <Text style={styles.signUpText}>Sign Up</Text>
                     </Pressable>
 
-                </View>
+                </View> */}
 
             </KeyboardAvoidingView>
 
@@ -119,51 +188,87 @@ const { height: screenHeight } = Dimensions.get("window")
 const styles = StyleSheet.create({
     Container: {
         height: screenHeight,
-        padding: 16,
+        padding: 26,
+        // borderColor: "red",
+        // borderWidth: 2,        
+        // justifyContent: "center",
+        // alignItems: "center",
+    },
+
+    logoContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 5,
+        marginTop: 14,
+    },
+
+    logoText: {
+        fontSize: 25,
+        fontWeight: 600,
+    },
+
+    welcomeContainer: {
+        marginVertical: 26,
+    },
+
+    welcomeText: {
+        fontSize: 25,
+        fontWeight: 600,
+    },
+
+    formContainer: {
+        gap: 30,
+        // borderRadius: 15,
+        // padding: 6,
+        // elevation: 15,
+        // width: "100%",
+        // backgroundColor: "white",
+        // shadowColor: '#000',
+        // shadowOffset: {
+        //     width: 0,
+        //     height: 8, // higher = more shadow below
+        // },
+        // shadowOpacity: 0.2,
+        // shadowRadius: 10.32,
+        // height: screenHeight * 0.5,
+    },
+
+    loginBtn: {
+        height: 58,
+        backgroundColor: "#61E838",
+        borderRadius: 50,
         justifyContent: "center",
         alignItems: "center",
     },
 
-    formContainer: {
-        borderRadius: 15,
-        padding: 6,
-        elevation: 15,
-        width: "100%",
-        backgroundColor: "white",
-        gap: 40,
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 8, // higher = more shadow below
-        },
-        shadowOpacity: 0.2,
-        shadowRadius: 10.32,
-        // height: screenHeight * 0.5,
-    },
-
-    formField: {
-        gap: 10,
-
-    },
-
-    formTitle: {
-        fontSize: 30,
+    loginText: {
+        fontSize: 20,
         fontWeight: 600,
-        color: "green",
-        textAlign: "center"
     },
 
-    signUp: {
-        flexDirection: "row",
-        gap: 20,
-        margin: 16,
-        justifyContent: "center",
-    },
+    // formField: {
+    //     gap: 10,
 
-    signUpText: {
-        // fontSize: 26,
-        color: "green"
-    },
+    // },
+
+    // formTitle: {
+    //     fontSize: 30,
+    //     fontWeight: 600,
+    //     color: "green",
+    //     textAlign: "center"
+    // },
+
+    // signUp: {
+    //     flexDirection: "row",
+    //     gap: 20,
+    //     margin: 16,
+    //     justifyContent: "center",
+    // },
+
+    // signUpText: {
+    //     // fontSize: 26,
+    //     color: "green"
+    // },
 
 })
 

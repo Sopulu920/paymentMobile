@@ -1,5 +1,7 @@
-import { View, Text, TextInput, StyleSheet, Platform } from "react-native"
+import { View, Text, TextInput, StyleSheet, Platform, Pressable } from "react-native"
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5"
 import type { KeyboardTypeOptions } from "react-native";
+import { useState } from "react";
 
 interface InputProps {
     name?: string;
@@ -20,9 +22,12 @@ export const Input: React.FC<InputProps> = ({
     capitalizeFirstLetter = false,
     keyboardType,
 }) => {
+
+    // const [secure, setSecure] = useState(false)
+
     return (
         <View style={styles.container}>
-            {name ? (<Text style={styles.label}>{name}</Text>):(<></>)}
+            {name ? (<Text style={styles.label}>{name}</Text>) : (<></>)}
             <TextInput
                 style={styles.input}
                 placeholder={placeholder ?? `Enter ${name}`}
@@ -33,6 +38,23 @@ export const Input: React.FC<InputProps> = ({
                 autoCapitalize={capitalizeFirstLetter ? "words" : "none"}
                 keyboardType={keyboardType ? keyboardType : "default"}
             />
+            <Pressable
+                // onPress={ }
+            >
+                {secure &&
+                    (<View style={styles.eye}>
+                        {!secure ? (<FontAwesome5
+                            name="eye"
+                            size={18}
+                        />)
+                            :
+                            (<FontAwesome5
+                                name="eye-slash"
+                                size={18}
+                            />)}
+                    </View>)
+                }
+            </Pressable>
         </View>
     )
 }
@@ -40,25 +62,33 @@ export const Input: React.FC<InputProps> = ({
 const styles = StyleSheet.create({
 
     container: {
-        position: "relative",
-        margin: 10,
+        // position: "relative",
+        // margin: 10,
+        gap: 10,
     },
 
     label: {
-        color: "gray",
-        position: "absolute",
-        top: -8,
-        left: 20,
-        backgroundColor: "white",
-        zIndex: 2,
+        // color: "gray",
+        // position: "absolute",
+        // top: -8,
+        // left: 20,
+        // backgroundColor: "white",
+        // zIndex: 2,
+        fontWeight: 600,
     },
 
     input: {
         borderWidth: 2,
-        borderColor: "gray",
-        borderRadius: 5,
-        height: Platform.OS === "ios" ? 38 : "auto",
-        padding: 6,
+        borderColor: "#639354",
+        borderRadius: 50,
+        height: 58,
+        padding: 20,
+    },
+
+    eye: {
+        position: "absolute",
+        right: 20,
+        bottom: 20,
     },
 
 })
