@@ -7,7 +7,8 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Home from "./screens/Home/index";
 import Profile from './screens/Profile';
 import Login from './screens/Login/Login';
-import SignUp from "./screens/SignUp/SignUp"
+import SignUp from "./screens/SignUp/SignUp";
+import History from "./screens/Transaction";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -18,8 +19,15 @@ function TabNavigator() {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ size, color }) => {
-          let icon = route.name === "Home" ? "home" : "user";
-          return <FontAwesome5 name={icon} size={size} color={color} solid />;
+          let icon;
+
+          if (route.name === "Home") {
+            icon = "home";
+          } else if (route.name === "Profile") {
+            icon = "user";
+          } else if (route.name === "History") {
+            icon = "history";
+          } return <FontAwesome5 name={icon} size={size} color={color} solid />;
         },
         tabBarActiveTintColor: "#61E838",
         tabBarInactiveTintColor: "gray",
@@ -41,6 +49,7 @@ function TabNavigator() {
       })}
     >
       <Tab.Screen name="Home" component={Home} />
+      <Tab.Screen name="History" component={History} />
       <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
   );

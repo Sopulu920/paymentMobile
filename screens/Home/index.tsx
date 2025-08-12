@@ -352,7 +352,7 @@ export default function Home() {
 
             </Row>
 
-            <Row title="Statistics">
+            {/* <Row title="Statistics">
 
 
               <View>
@@ -389,7 +389,7 @@ export default function Home() {
 
               </View>
 
-            </Row>
+            </Row> */}
 
             <Row
               title="Chart"
@@ -518,6 +518,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 30,
     padding: 20,
     zIndex: 1,
+    paddingBottom: 50,
   },
 
   service: {

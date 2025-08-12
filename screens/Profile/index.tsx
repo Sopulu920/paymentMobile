@@ -1,5 +1,6 @@
-import { View, Text, StyleSheet, Pressable, SafeAreaView, ScrollView, Dimensions, RefreshControl, ActivityIndicator } from "react-native"
+import { View, Text, StyleSheet, Pressable, SafeAreaView, ScrollView, Dimensions, RefreshControl, ActivityIndicator, FlatList } from "react-native"
 import { ProfileImage } from "@/component"
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5"
 import { Row } from "@/component"
 import { useAppSelector } from '@/redux/hook';
 import { useGetUserQuery } from "@/redux/api/bankApi";
@@ -53,6 +54,8 @@ export default function Profile() {
         }
     };
 
+    
+
     if (refreshing === true) {
         return (
             <SafeAreaView
@@ -75,12 +78,17 @@ export default function Profile() {
 
             <ScrollView
                 style={{
-                    height: screenHeight
+                    height: screenHeight,
+                    marginTop: 30,
                 }}
                 refreshControl={
                     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                 }
             >
+
+                <Pressable style={styles.logoutContainer}>
+                    <Text style={styles.logout}>Log Out</Text>
+                </Pressable>
 
                 <View style={styles.container}>
 
@@ -119,10 +127,6 @@ export default function Profile() {
 
                     </Row>
 
-                    <Pressable>
-                        <Text style={styles.logout}>Log Out</Text>
-                    </Pressable>
-
                 </View>
 
             </ScrollView>
@@ -135,8 +139,8 @@ const styles = StyleSheet.create({
 
     container: {
         padding: 16,
-        position: "relative",
-        top: 90,
+        // position: "relative",
+        top: 120,
         // maxWidth: 650,
         // width: "100%",
     },
@@ -166,8 +170,18 @@ const styles = StyleSheet.create({
     logout: {
         fontSize: 25,
         fontWeight: 600,
-        color: "red",
+        color: "#F50B00",
         margin: 9,
+    },
+
+    logoutContainer: {
+        position: "absolute",
+        right: 10,
+        top: 15,
+        backgroundColor: "#F50B004D",
+        borderWidth: 1,
+        borderColor: "#F50B00",
+        borderRadius: 15,
     },
 
     profileImg: {
@@ -175,7 +189,6 @@ const styles = StyleSheet.create({
         top: -25,
         left: "38%",
         zIndex: 2,
-
     },
 
     profileCard: {
