@@ -107,10 +107,15 @@ export const bankApi = createApi({
                 body: data,
             }),
         }),
-        getTransactions: builder.query<GetTransactionsResponse, { user?: string }>({
-            query: ({ user }) => {
-                const params: Record<string, string> = {};
+        getTransactions: builder.query<GetTransactionsResponse, { user?: string, limit?: number }>({
+            query: ({ user, limit }) => {
+                const params: Record<string, string | number> = {};
                 if (user) params.user = user;
+                if (limit) {
+                    params.limit = limit;
+                }else{
+                    params.limit = 150;
+                };
 
                 return {
                     url: "/transactions",

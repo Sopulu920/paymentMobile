@@ -1,7 +1,8 @@
-import { StyleSheet, View, Text, ScrollView, Dimensions, ImageBackground, Platform, SafeAreaView, Pressable, Modal, RefreshControl, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, Dimensions, ImageBackground, Platform, Pressable, Modal, RefreshControl, ActivityIndicator } from 'react-native';
 import { Card, Button, Row, StatCard, Greetings, Input, ProfileImage } from '@/component';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { PieChart,LineChart } from 'react-native-chart-kit';
+import { PieChart } from 'react-native-chart-kit';
 import { useState } from 'react';
 import { useAppSelector } from '@/redux/hook';
 import { useGetTransactionsQuery, Transaction, useDepositMutation, useWithdrawMutation, useTransferMutation, useVerifyTransferMutation } from '@/redux/api/bankApi';
@@ -19,11 +20,12 @@ export default function Home() {
 
   const { data: authData } = useAppSelector(state => state.auth)
   const { data: transactionHistory, refetch } = useGetTransactionsQuery({
-    user: authData?._id
+    user: authData?._id,
+    // limit: 50
   })
-  const [deposit] = useDepositMutation()
-  const [withdraw] = useWithdrawMutation()
-  const [transfer] = useTransferMutation()
+  const [deposit, { isLoading: depositLoading }] = useDepositMutation()
+  const [withdraw, { isLoading: withdrawLoading }] = useWithdrawMutation()
+  const [transfer, { isLoading: transferLoading }] = useTransferMutation()
   const [postAccountNumber, { data: accountHolderName }] = useVerifyTransferMutation()
 
   // const verify = async (number: number) => {
@@ -78,7 +80,8 @@ export default function Home() {
 
 
   const handleSubmit = async () => {
-    if (!amount) return alert("Please enter amount");
+    if (!amount||!accountNumber || accountNumber.length !== 10) return alert("Please enter vaild amount or account number");
+    // if (!accountNumber || accountNumber.length !== 10) setAccountHolder("Enter 10 Digit Account Number")
 
 
     try {
@@ -215,17 +218,17 @@ export default function Home() {
   // const receiver = accountHolderName
   console.log("kliofeifjie", accountHolder)
 
-//   const datag = {
-//   labels: ["January", "February", "March", "April", "May", "June"],
-//   datasets: [
-//     {
-//       data: [20, 45, 28, 80, 99, 43],
-//       color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // optional
-//       strokeWidth: 2 // optional
-//     }
-//   ],
-//   legend: ["Rainy Days"] // optional
-// };
+  //   const datag = {
+  //   labels: ["January", "February", "March", "April", "May", "June"],
+  //   datasets: [
+  //     {
+  //       data: [20, 45, 28, 80, 99, 43],
+  //       color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // optional
+  //       strokeWidth: 2 // optional
+  //     }
+  //   ],
+  //   legend: ["Rainy Days"] // optional
+  // };
 
   if (refreshing === true) {
     return (
@@ -449,23 +452,26 @@ export default function Home() {
               {visibleModal?.toUpperCase()}
             </Text>
 
-            <Text>{accountHolder}</Text>
-
             <View style={modalStyles.formContainer}>
 
               {visibleModal === "transfer" && (
-                <Input
-                  name='Enter account number'
-                  placeholder="Enter account number"
-                  keyboardType="numeric"
-                  value={accountNumber}
-                  onChangeText={handleTransfer}
-                // style={modalStyles.input}
-                />
+                <View>
+                  {/* <Text>Receiver</Text> */}
+                  <Text style={modalStyles.benefiaciary}>{accountHolder}</Text>
+
+                  <Input
+                    // name='Enter account number'
+                    placeholder="Enter 10 Digit Account Number"
+                    keyboardType="numeric"
+                    value={accountNumber}
+                    onChangeText={handleTransfer}
+                  // style={modalStyles.input}
+                  />
+                </View>
               )}
 
               <Input
-                name='Enter amount'
+                // name='Enter amount'
                 placeholder="Enter amount"
                 keyboardType="numeric"
                 value={amount}
@@ -475,8 +481,18 @@ export default function Home() {
 
               <View style={modalStyles.btn}>
 
-                <Pressable style={modalStyles.submitButton} onPress={handleSubmit}>
-                  <Text style={modalStyles.submitText}>Submit</Text>
+                <Pressable
+                  style={modalStyles.submitButton}
+                  onPress={handleSubmit}
+                  disabled={transferLoading || depositLoading || withdrawLoading}
+                >
+
+                  {
+                    transferLoading || depositLoading || withdrawLoading ?
+                      (<ActivityIndicator size="large" color="#0000ff" />) :
+                      (<Text style={modalStyles.submitText}>Submit</Text>)
+                  }
+
                 </Pressable>
 
                 <Pressable onPress={() => setVisibleModal(null)}>
@@ -557,10 +573,10 @@ const styles = StyleSheet.create({
 
   },
 
-  transaction:{
+  transaction: {
     justifyContent: "center",
     alignItems: "center",
-    },
+  },
 
 });
 
@@ -599,31 +615,43 @@ const modalStyles = StyleSheet.create({
 
   formContainer: {
     width: "100%",
-    gap: 30,
+    gap: 10,
     paddingHorizontal: 7,
   },
 
   btn: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    // flexDirection: "row",
+    // justifyContent: "space-between",
   },
 
   submitButton: {
-    backgroundColor: "#008080",
+    backgroundColor: "#61E838",
     paddingVertical: 10,
     paddingHorizontal: 30,
-    borderRadius: 8,
+    borderRadius: 25,
     marginBottom: 10,
   },
 
   submitText: {
     color: "#fff",
     fontWeight: "bold",
+    textAlign: "center",
   },
 
   cancelText: {
     color: "red",
     fontSize: 16,
     marginTop: 10,
+    textAlign: "center",
   },
+
+  benefiaciary: {
+    marginHorizontal: 15,
+    // width: "",
+    // textAlign: "center",
+    lineHeight: 30,
+    fontSize: 16,
+    opacity: 0.6,
+    // alignItems:"center",
+  }
 });

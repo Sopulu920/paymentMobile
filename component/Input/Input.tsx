@@ -37,11 +37,13 @@ export const Input: React.FC<InputProps> = ({
                 autoCapitalize={capitalizeFirstLetter ? "words" : "none"}
                 keyboardType={keyboardType ? keyboardType : "default"}
             />
-            <Pressable
-                onPress={() => setShow(!show)}
-            >
+            <View>
                 {secure &&
-                    (<View style={styles.eye}>
+                    (<
+                        Pressable
+                        style={styles.eye}
+                        onPress={() => setShow(!show)}
+                    >
                         {!show ? (<FontAwesome5
                             name="eye-slash"
                             size={18}
@@ -53,9 +55,9 @@ export const Input: React.FC<InputProps> = ({
                                 size={18}
                                 color="grey"
                             />)}
-                    </View>)
+                    </Pressable>)
                 }
-            </Pressable>
+            </View>
         </View>
     )
 }
@@ -81,7 +83,7 @@ const styles = StyleSheet.create({
     input: {
         borderWidth: 2,
         borderColor: "#6393544D",
-        
+
         borderRadius: 50,
         lineHeight: 18,
         padding: 20,
@@ -91,7 +93,10 @@ const styles = StyleSheet.create({
     eye: {
         position: "absolute",
         right: 20,
-        bottom: 30,
+        bottom: 20,
+        padding: 10,
+        // borderWidth: 2,
+        // borderColor: "red"
     },
 
 })

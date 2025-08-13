@@ -1,9 +1,14 @@
-import { View, Text, StyleSheet, Pressable, SafeAreaView, ScrollView, Dimensions, RefreshControl, ActivityIndicator, FlatList } from "react-native"
+import { View, Text, StyleSheet, Pressable, ScrollView, Dimensions, RefreshControl, ActivityIndicator, FlatList, Alert } from "react-native"
 import { ProfileImage } from "@/component"
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5"
 import { Row } from "@/component"
-import { useAppSelector } from '@/redux/hook';
+import { useAppSelector, useAppDispatch } from '@/redux/hook';
 import { useGetUserQuery } from "@/redux/api/bankApi";
+import { logout } from '@/redux/slices/authSlice';
 import { useState } from "react";
 
 export default function Profile() {
@@ -15,6 +20,8 @@ export default function Profile() {
         id: authData?._id
     })
     const [refreshing, setRefreshing] = useState(false);
+    const navigation = useNavigation<NativeStackNavigationProp<any>>();
+    const dispatch = useAppDispatch();
 
 
     const userData = user?.data
@@ -48,10 +55,32 @@ export default function Profile() {
         } catch (e) {
             console.error("Refresh failed", e);
         } finally {
-            // setTimeout(() => {
             setRefreshing(false);
-            // }, 5000);      
         }
+    };
+
+    const handleLogout = () => {
+        Alert.alert(
+            "Logout",
+            "Are you sure you want to logout?",
+            [
+                {
+                    text: "Cancel",
+                    style: "cancel"
+                },
+                {
+                    text: "Logout",
+                    onPress: () => {
+                        dispatch(logout());
+                        navigation.reset({
+                            index: 0,
+                            routes: [{ name: 'Login' }]
+                        });
+                    },
+                    style: "destructive"
+                }
+            ]
+        );
     };
 
     
@@ -86,7 +115,7 @@ export default function Profile() {
                 }
             >
 
-                <Pressable style={styles.logoutContainer}>
+                <Pressable style={styles.logoutContainer} onPress={handleLogout}>
                     <Text style={styles.logout}>Log Out</Text>
                 </Pressable>
 
@@ -177,7 +206,7 @@ const styles = StyleSheet.create({
     logoutContainer: {
         position: "absolute",
         right: 10,
-        top: 15,
+        top: 10,
         backgroundColor: "#F50B004D",
         borderWidth: 1,
         borderColor: "#F50B00",
