@@ -1,5 +1,5 @@
 import { StyleSheet, View, Text, ScrollView, Dimensions, ImageBackground, Platform, Pressable, Modal, RefreshControl, ActivityIndicator } from 'react-native';
-import { Card, Button, Row, StatCard, Greetings, Input, ProfileImage } from '@/component';
+import { Card, Button, Row, Greetings, Input, ProfileImage } from '@/component';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { PieChart } from 'react-native-chart-kit';
@@ -27,16 +27,6 @@ export default function Home() {
   const [withdraw, { isLoading: withdrawLoading }] = useWithdrawMutation()
   const [transfer, { isLoading: transferLoading }] = useTransferMutation()
   const [postAccountNumber, { data: accountHolderName }] = useVerifyTransferMutation()
-
-  // const verify = async (number: number) => {
-  //   try {
-  //     await postAccountNumber({
-  //       accountNumber: number
-  //     })
-  //   } catch (err) {
-  //     console.log(err)
-  //   }
-  // }
 
   const handleTransfer = async (text: string) => {
     setAccountNumber(text);
@@ -72,17 +62,13 @@ export default function Home() {
     } catch (e) {
       console.error("Refresh failed", e);
     } finally {
-      // setTimeout(() => {
       setRefreshing(false);
-      // }, 5000);      
     }
   };
 
 
   const handleSubmit = async () => {
-    if (!amount||!accountNumber || accountNumber.length !== 10) return alert("Please enter vaild amount or account number");
-    // if (!accountNumber || accountNumber.length !== 10) setAccountHolder("Enter 10 Digit Account Number")
-
+    if (!amount || !accountNumber || accountNumber.length !== 10) return alert("Please enter vaild amount or account number");
 
     try {
       if (visibleModal === "deposit") {
@@ -115,8 +101,6 @@ export default function Home() {
 
         }).unwrap()
       }
-
-
 
     } catch (err) {
       console.log(err)
@@ -157,21 +141,6 @@ export default function Home() {
   const expense = transactionHistory?.data
     ?.filter((txn: Transaction) => txn.transactionType === "debit")
     ?.reduce((sum, txn) => sum + txn.amount, 0) ?? 0;
-
-  // const income = formatNumber(incomes ?? 0)
-  // const expenses = formatNumber(expense ?? 0)
-
-  // // const income
-  // // console.log("Income:", );
-  // // console.log("kdjfjf", )
-  // console.log("Income:", income);
-  // console.log("kdjfjf", expenses)
-  // console.log("Expense:", expense); // 0 (no debit transactions yet)
-
-
-  // const income = 21500000
-
-  // const expenses = 2800000
 
   const data = [
     {
@@ -217,18 +186,6 @@ export default function Home() {
   const creationDate = authData?.createdAt
   // const receiver = accountHolderName
   console.log("kliofeifjie", accountHolder)
-
-  //   const datag = {
-  //   labels: ["January", "February", "March", "April", "May", "June"],
-  //   datasets: [
-  //     {
-  //       data: [20, 45, 28, 80, 99, 43],
-  //       color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // optional
-  //       strokeWidth: 2 // optional
-  //     }
-  //   ],
-  //   legend: ["Rainy Days"] // optional
-  // };
 
   if (refreshing === true) {
     return (
@@ -355,45 +312,6 @@ export default function Home() {
 
             </Row>
 
-            {/* <Row title="Statistics">
-
-
-              <View>
-
-                <StatCard
-                  icon={
-                    <FontAwesome5
-                      name="arrow-up"
-                      size={32}
-                    />
-                  }
-                  title='INCOME'
-                  value={incomes}
-                  cardColour='#004225'
-                  iconColour='#50C878'
-                />
-
-              </View>
-
-              <View>
-
-                <StatCard
-                  icon={
-                    <FontAwesome5
-                      name="arrow-down"
-                      size={32}
-                    />
-                  }
-                  title='EXPENSES'
-                  value={expense}
-                  cardColour='#FF0000'
-                  iconColour='#E44D2E'
-                />
-
-              </View>
-
-            </Row> */}
-
             <Row
               title="Chart"
               style={styles.pie}
@@ -413,23 +331,6 @@ export default function Home() {
               />
 
             </Row>
-
-            {/* <Row>
-
-              <LineChart
-                data={datag}
-                width={300}
-                height={256}
-                verticalLabelRotation={30}
-                chartConfig={chartConfig}
-                bezier
-              />
-
-            </Row> */}
-
-            {/* <Input
-            // name='jhgg'
-            /> */}
 
           </View>
 

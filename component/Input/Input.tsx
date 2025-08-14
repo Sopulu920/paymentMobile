@@ -1,4 +1,4 @@
-import { View, Text, TextInput, StyleSheet, Platform, Pressable } from "react-native"
+import { View, Text, TextInput, StyleSheet, Pressable } from "react-native"
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5"
 import { useState } from "react";
 
@@ -65,18 +65,10 @@ export const Input: React.FC<InputProps> = ({
 const styles = StyleSheet.create({
 
     container: {
-        // position: "relative",
-        // margin: 10,
         gap: 10,
     },
 
     label: {
-        // color: "gray",
-        // position: "absolute",
-        // top: -8,
-        // left: 20,
-        // backgroundColor: "white",
-        // zIndex: 2,
         fontWeight: 600,
     },
 
@@ -87,7 +79,6 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         lineHeight: 18,
         padding: 20,
-        // backgroundColor: "transparent"
     },
 
     eye: {
@@ -95,8 +86,6 @@ const styles = StyleSheet.create({
         right: 20,
         bottom: 20,
         padding: 10,
-        // borderWidth: 2,
-        // borderColor: "red"
     },
 
 })

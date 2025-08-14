@@ -1,5 +1,4 @@
 import { View, StyleSheet, Text, Dimensions, Pressable, KeyboardAvoidingView, ScrollView, RefreshControl, ActivityIndicator } from "react-native";
-import LinearGradient from "react-native-linear-gradient";
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Input } from "@/component";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -39,13 +38,10 @@ export default function Login() {
         setRefreshing(true);
         try {
             await clearField()
-            //   await refetch(); // 👈 This is from useGetTransactionsQuery
         } catch (e) {
             console.error("Refresh failed", e);
         } finally {
-            // setTimeout(() => {
             setRefreshing(false);
-            // }, 5000);      
         }
     };
 
@@ -144,19 +140,6 @@ export default function Login() {
                             secure={true}
                         />
 
-                        {/* <LinearGradient
-                        
-                    /> */}
-                        {/* <LinearGradient
-                        colors={['#ff7e5f', '#feb47b']}
-                        start={{ x: 0, y: 0 }}
-                        end={{ x: 1, y: 0 }}
-                        style={{ height: 100, width: '100%' }}
-                    >
-
-                    </LinearGradient> */}
-
-
                         <Pressable
                             style={styles.loginBtn}
                             onPress={handleLogin}
@@ -192,56 +175,7 @@ export default function Login() {
                         <View style={styles.line} />
 
                     </View>
-                    {/* 
-                <View style={styles.formContainer}>
-
-                    <Text style={styles.formTitle}>WELCOME</Text>
-
-                    <View style={styles.formField}>
-
-                        <Input
-                            name="Email Address"
-                            placeholder="example@gmail.com"
-                            value={email}
-                            onChangeText={setEmail}
-                        />
-
-                        <Input
-                            name="Password"
-                            secure={true}
-                            value={password}
-                            onChangeText={setPassword}
-                        />
-
-                    </View>
-
-                    <View style={{ marginBottom: 13 }}>
-
-                        <Button
-                            title="Login"
-                            onPress={() => { handleLogin() }}
-                            color={"green"}
-                        // style={{}}
-                        />
-
-                    </View>
-
-                </View>
-
-                <View style={styles.signUp}>
-
-                    <Text>
-                        I don't have an Account ?
-                    </Text>
-
-                    <Pressable
-
-                        onPress={() => navigation.navigate("SignUp")}
-                    >
-                        <Text style={styles.signUpText}>Sign Up</Text>
-                    </Pressable>
-
-                </View> */}
+                    
                 </ScrollView>
 
             </KeyboardAvoidingView>
@@ -285,19 +219,6 @@ const styles = StyleSheet.create({
 
     formContainer: {
         gap: 30,
-        // borderRadius: 15,
-        // padding: 6,
-        // elevation: 15,
-        // width: "100%",
-        // backgroundColor: "white",
-        // shadowColor: '#000',
-        // shadowOffset: {
-        //     width: 0,
-        //     height: 8, // higher = more shadow below
-        // },
-        // shadowOpacity: 0.2,
-        // shadowRadius: 10.32,
-        // height: screenHeight * 0.5,
     },
 
     loginBtn: {
@@ -334,20 +255,5 @@ const styles = StyleSheet.create({
         backgroundColor: "#000000ff"
     },
 
-
-    // formField: {
-    //     gap: 10,
-
-    // },
-
-    // formTitle: {
-    //     fontSize: 30,
-    //     fontWeight: 600,
-    //     color: "green",
-    //     textAlign: "center"
-    // },
-
-
 })
 
-// export const UserData = loginData

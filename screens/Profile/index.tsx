@@ -1,15 +1,19 @@
-import { View, Text, StyleSheet, Pressable, ScrollView, Dimensions, RefreshControl, ActivityIndicator, FlatList, Alert } from "react-native"
+import { View, Text, StyleSheet, Pressable, ScrollView, Dimensions, RefreshControl, ActivityIndicator, Alert } from "react-native"
 import { ProfileImage } from "@/component"
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-
-import FontAwesome5 from "react-native-vector-icons/FontAwesome5"
 import { Row } from "@/component"
 import { useAppSelector, useAppDispatch } from '@/redux/hook';
 import { useGetUserQuery } from "@/redux/api/bankApi";
 import { logout } from '@/redux/slices/authSlice';
 import { useState } from "react";
+
+type RootStackParamList = {
+    Login: undefined;
+};
+
+type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'Login'>;
 
 export default function Profile() {
 
@@ -20,7 +24,7 @@ export default function Profile() {
         id: authData?._id
     })
     const [refreshing, setRefreshing] = useState(false);
-    const navigation = useNavigation<NativeStackNavigationProp<any>>();
+    const navigation = useNavigation<NavigationProp>();
     const dispatch = useAppDispatch();
 
 
